@@ -1,0 +1,95 @@
+import React from "react";
+import useAuth from "../../../Hooks/useAuth";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router";
+import Swal from "sweetalert2";
+
+const MyDonationRequests = () => {
+  const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
+
+  const { data: requests = [], refetch } = useQuery({
+    queryKey: ["myRequests", user?.email],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/requests?email=${user.email}`);
+      return res.data;
+    },
+  });
+
+  const handleRequestDelete = (id) => {
+    console.log(id);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.delete(`/requests/${id}`).then((res) => {
+          if (res.data.deletedCount) {
+            refetch();
+            Swal.fire({
+              title: "Deleted!",
+              text: "Your donation request has been deleted.",
+              icon: "success",
+            });
+          }
+        });
+      }
+    });
+  };
+
+  return (
+    <div>
+      <div className="overflow-x-auto">
+        <table className="table table-zebra">
+          {/* head */}
+          <thead>
+            <tr>
+              <th></th>
+              <th>Recipient Name {requests.length}</th>
+              <th>Recipient Location</th>
+              <th>Donation Date</th>
+              <th>Donation Time</th>
+              <th>Blood Group</th>
+              <th>Donation Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* row 1 */}
+            {requests.map((r, i) => (
+              <tr key={r._id}>
+                <th>{i + 1}</th>
+                <td>{r.recipientName}</td>
+                <td>
+                  {r.recipientDistrict}, {r.recipientUpazila}
+                </td>
+                <td>{r.donationDate}</td>
+                <td>{r.donationTime}</td>
+                <td>{r.bloodGroup}</td>
+                <td>{r.donationStatus}</td>
+                <td>
+                  <Link className="btn">View</Link>
+                  <button className="btn">Edit</button>
+                  <button
+                    onClick={() => handleRequestDelete(r._id)}
+                    className="btn"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+export default MyDonationRequests;
