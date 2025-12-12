@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router";
 import useAuth from "../../../Hooks/useAuth";
 import axios from "axios";
 import { useLoaderData } from "react-router";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 
 const Register = () => {
   const {
@@ -14,7 +15,7 @@ const Register = () => {
   } = useForm();
   const { registerUser, updateUser } = useAuth();
   const navigate = useNavigate();
-
+  const axiosSecure = useAxiosSecure();
   const districtsData = useLoaderData();
 
   const [upazilas, setUpazilas] = useState([]);
@@ -49,7 +50,7 @@ const Register = () => {
 
     registerUser(data.email, data.password)
       .then((res) => {
-        console.log(res.user);
+        // console.log(res.user);
 
         const formData = new FormData();
         formData.append("image", profileImg);
@@ -59,8 +60,28 @@ const Register = () => {
         }`;
 
         axios.post(image_api_url, formData).then((imgRes) => {
-          console.log("image upload", imgRes.data);
+          // console.log("image upload", imgRes.data);
           const imageUrl = imgRes.data.data.url;
+
+          const donorInfo = {
+            name: data.name,
+            email: data.email,
+            image: imageUrl,
+            bloodGroup: data.bloodGroup,
+            district: data.district,
+            upazila: data.upazila,
+            password: data.password,
+            role: "donor",
+            status: "active",
+            createdAt: new Date(),
+          };
+
+          axiosSecure.post("/donors", donorInfo).then((res) => {
+            if (res.data.insertedId) {
+              console.log("donor created");
+            }
+          });
+
           const updateProfile = {
             displayName: data.name,
             photoURL: imageUrl,
@@ -194,10 +215,17 @@ const Register = () => {
           <label className="label">Confirm Password</label>
           <input
             type="password"
-            {...register("confirm-password", {})}
+            {...register("confirmPassword", {
+              required: "Confirm Password is required",
+              validate: (value) =>
+                value === watch("password") || "Passwords do not match",
+            })}
             className="input w-full"
             placeholder="Confirm Your Password"
           />
+          {errors.confirmPassword && (
+            <p className="text-red-700">{errors.confirmPassword.message}</p>
+          )}
 
           <button className="btn btn-primary text-black mt-4">Register</button>
         </fieldset>
