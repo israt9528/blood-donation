@@ -1,30 +1,79 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import useAuth from "../../../Hooks/useAuth";
 import axios from "axios";
+import { useLoaderData } from "react-router";
 
 const Register = () => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm();
-  const { registerUser } = useAuth();
+  const { registerUser, updateUser } = useAuth();
+  const navigate = useNavigate();
+
+  const districtsData = useLoaderData();
+
+  const [upazilas, setUpazilas] = useState([]);
+
+  useEffect(() => {
+    fetch("/upazilasInfo.json")
+      .then((res) => res.json())
+      .then((data) => {
+        setUpazilas(data);
+      });
+  }, []);
+  console.log(upazilas);
+
+  const districts = districtsData.map((d) => d.name);
+  //   console.log(districts);
+
+  const selectedDistrict = watch("district");
+
+  const getDistrictId = (name) => {
+    const found = districtsData.find((d) => d.name === name);
+    return found ? found.id : null;
+  };
+
+  const upazilasByDistrict = selectedDistrict
+    ? upazilas.filter((u) => u.district_id === getDistrictId(selectedDistrict))
+    : [];
 
   const handleRegister = (data) => {
+    console.log(data);
+
     const profileImg = data.photo[0];
+
     registerUser(data.email, data.password)
       .then((res) => {
         console.log(res.user);
 
         const formData = new FormData();
         formData.append("image", profileImg);
+
         const image_api_url = `https://api.imgbb.com/1/upload?&key=${
-          import.meta.env.Vite_image_api
+          import.meta.env.VITE_image_api
         }`;
-        axios.post(image_api_url, formData).then((res) => {
-          console.log("image upload", res.data);
+
+        axios.post(image_api_url, formData).then((imgRes) => {
+          console.log("image upload", imgRes.data);
+          const imageUrl = imgRes.data.data.url;
+          const updateProfile = {
+            displayName: data.name,
+            photoURL: imageUrl,
+          };
+
+          updateUser(updateProfile)
+            .then(() => {
+              console.log("user profile updated");
+              navigate(location?.state || "/");
+            })
+            .catch((error) => {
+              console.log(error);
+            });
         });
       })
       .catch((error) => {
@@ -40,6 +89,7 @@ const Register = () => {
       </div>
       <form onSubmit={handleSubmit(handleRegister)} className="card-body">
         <fieldset className="fieldset">
+          {/* name */}
           <label className="label">Name</label>
           <input
             type="text"
@@ -50,7 +100,7 @@ const Register = () => {
           {errors.name?.type === "required" && (
             <p className="text-red-700">Name is a required field</p>
           )}
-
+          {/* email */}
           <label className="label">Email</label>
           <input
             type="email"
@@ -61,16 +111,18 @@ const Register = () => {
           {errors.email?.type === "required" && (
             <p className="text-red-700">Email is a required field</p>
           )}
+          {/* image */}
           <label className="label">Photo</label>
           <input
             type="file"
             {...register("photo", { required: true })}
             className="file-input w-full"
           />
+          {/* blood group */}
           <label className="label">Blood Group</label>
-
           <select
             defaultValue="Select Blood Group"
+            {...register("bloodGroup", { required: true })}
             className="select appearance-none w-full"
           >
             <option disabled={true}>Select Blood Group</option>
@@ -83,6 +135,35 @@ const Register = () => {
             <option>O+</option>
             <option>O-</option>
           </select>
+          {/* district */}
+          <label className="label">District</label>
+          <select
+            defaultValue="Select Your District"
+            {...register("district", { required: true })}
+            className="select appearance-none w-full"
+          >
+            <option disabled={true}>Select Your District</option>
+            {districts.map((d, i) => (
+              <option key={i} value={d}>
+                {d}
+              </option>
+            ))}
+          </select>
+          {/* upazila */}
+          <label className="label">Upazila</label>
+          <select
+            defaultValue="Select Your Upazila"
+            {...register("upazila", { required: true })}
+            className="select appearance-none w-full"
+          >
+            <option disabled={true}>Select Your Upazila</option>
+            {upazilasByDistrict.map((u, i) => (
+              <option key={i} value={u.name}>
+                {u.name}
+              </option>
+            ))}
+          </select>
+          {/* password */}
           <label className="label">Password</label>
           <input
             type="password"

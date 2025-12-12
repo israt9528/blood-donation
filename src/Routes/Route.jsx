@@ -32,6 +32,7 @@ export const router = createBrowserRouter([
       {
         path: "auth/register",
         Component: Register,
+        loader: () => fetch("/districtsInfo.json").then((res) => res.json()),
       },
     ],
   },

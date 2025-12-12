@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import useAuth from "../../../Hooks/useAuth";
 
 const Login = () => {
@@ -10,12 +10,15 @@ const Login = () => {
     formState: { errors },
   } = useForm();
   const { loginUser } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const handleLogin = (data) => {
     console.log(data);
     loginUser(data.email, data.password)
       .then((res) => {
         console.log(res.user);
+        navigate(location?.state || "/");
       })
       .catch((error) => {
         console.log(error);
