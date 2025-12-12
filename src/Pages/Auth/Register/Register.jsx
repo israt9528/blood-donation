@@ -70,7 +70,6 @@ const Register = () => {
             bloodGroup: data.bloodGroup,
             district: data.district,
             upazila: data.upazila,
-            password: data.password,
             role: "donor",
             status: "active",
             createdAt: new Date(),

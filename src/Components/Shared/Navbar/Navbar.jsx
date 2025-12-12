@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, NavLink } from "react-router";
 import useAuth from "../../../Hooks/useAuth";
+import { FaUserCircle } from "react-icons/fa";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -61,13 +62,32 @@ const Navbar = () => {
       </div>
       <div className="navbar-end">
         {user ? (
-          <button onClick={handleLogout} className="btn">
-            Logout
-          </button>
+          <div className="dropdown">
+            <img
+              tabIndex={0}
+              src={user?.photoURL}
+              alt=""
+              className="w-10 h-10 rounded-full"
+            />
+            <ul
+              tabIndex="-1"
+              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+            >
+              <li>
+                <NavLink to="/dashboard">Dashboard</NavLink>
+              </li>
+              <button onClick={handleLogout} className="btn">
+                Logout
+              </button>
+            </ul>
+          </div>
         ) : (
-          <Link to="/auth/login" className="btn">
-            Login
-          </Link>
+          <>
+            <FaUserCircle />{" "}
+            <Link to="/auth/login" className="btn">
+              Login
+            </Link>
+          </>
         )}
       </div>
     </div>

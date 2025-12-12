@@ -5,6 +5,11 @@ import DonationRequests from "../Pages/DonationRequests/DonationRequests";
 import AuthLayout from "../Layouts/AuthLayout";
 import Login from "../Pages/Auth/Login/Login";
 import Register from "../Pages/Auth/Register/Register";
+import PrivateRoute from "./PrivateRoute";
+import DashboardLayout from "../Layouts/DashboardLayout";
+import Profile from "../Pages/Dashboard/Profile/Profile";
+import HomePage from "../Pages/Dashboard/HomePage/HomePage";
+import CreateDonationRequest from "../Pages/Dashboard/CreateDonationRequest/CreateDonationRequest";
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +38,28 @@ export const router = createBrowserRouter([
         path: "auth/register",
         Component: Register,
         loader: () => fetch("/districtsInfo.json").then((res) => res.json()),
+      },
+    ],
+  },
+  {
+    path: "dashboard",
+    element: (
+      <PrivateRoute>
+        <DashboardLayout></DashboardLayout>
+      </PrivateRoute>
+    ),
+    children: [
+      {
+        path: "dashboard",
+        Component: HomePage,
+      },
+      {
+        path: "profile",
+        Component: Profile,
+      },
+      {
+        path: "create-donation-request",
+        Component: CreateDonationRequest,
       },
     ],
   },
