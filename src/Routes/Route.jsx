@@ -12,6 +12,7 @@ import HomePage from "../Pages/Dashboard/HomePage/HomePage";
 import CreateDonationRequest from "../Pages/Dashboard/CreateDonationRequest/CreateDonationRequest";
 import MyDonationRequests from "../Pages/Dashboard/MyDonationRequests/MyDonationRequests";
 import UpdateDonationRequest from "../Pages/Dashboard/UpdateDonationRequest/UpdateDonationRequest";
+import DonationRequestDetails from "../Pages/Dashboard/DonationRequestDetails/DonationRequestDetails";
 
 export const router = createBrowserRouter([
   {
@@ -70,6 +71,10 @@ export const router = createBrowserRouter([
       {
         path: "update-donation-request/:id",
         Component: UpdateDonationRequest,
+      },
+      {
+        path: "donation-request-details/:id",
+        Component: DonationRequestDetails,
       },
     ],
   },

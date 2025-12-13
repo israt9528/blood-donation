@@ -57,6 +57,8 @@ const MyDonationRequests = () => {
               <th>Donation Time</th>
               <th>Blood Group</th>
               <th>Donation Status</th>
+              <th>Donor Information</th>
+
               <th>Actions</th>
             </tr>
           </thead>
@@ -67,14 +69,25 @@ const MyDonationRequests = () => {
                 <th>{i + 1}</th>
                 <td>{r.recipientName}</td>
                 <td>
-                  {r.recipientDistrict}, {r.recipientUpazila}
+                  <p>Upazila: {r.recipientUpazila}</p>
+                  <p>District: {r.recipientDistrict}</p>
                 </td>
                 <td>{r.donationDate}</td>
                 <td>{r.donationTime}</td>
                 <td>{r.bloodGroup}</td>
                 <td>{r.donationStatus}</td>
                 <td>
-                  <Link className="btn">View</Link>
+                  {" "}
+                  <p>Name: {r.donorName}</p>
+                  <p>Email: {r.donorEmail}</p>
+                </td>
+                <td>
+                  <Link
+                    to={`/dashboard/donation-request-details/${r._id}`}
+                    className="btn"
+                  >
+                    View
+                  </Link>
                   <Link
                     to={`/dashboard/update-donation-request/${r._id}`}
                     className="btn"
@@ -87,6 +100,12 @@ const MyDonationRequests = () => {
                   >
                     Delete
                   </Link>
+                  {r.donationStatus === "inprogress" && (
+                    <>
+                      <button className="btn">Done</button>
+                      <button className="btn">Cancel</button>
+                    </>
+                  )}
                 </td>
               </tr>
             ))}
