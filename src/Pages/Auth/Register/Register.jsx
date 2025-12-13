@@ -62,7 +62,6 @@ const Register = () => {
         axios.post(image_api_url, formData).then((imgRes) => {
           // console.log("image upload", imgRes.data);
           const imageUrl = imgRes.data.data.url;
-
           const donorInfo = {
             name: data.name,
             email: data.email,

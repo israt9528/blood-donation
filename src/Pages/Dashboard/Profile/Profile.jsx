@@ -1,123 +1,95 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import useAuth from "../../../Hooks/useAuth";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import { useForm } from "react-hook-form";
 import { FiEdit2, FiSave, FiUpload, FiCheckCircle } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
+import axios from "axios";
 
-const IMGBB_API_KEY = import.meta.env.VITE_image_api || "";
+// const IMGBB_API_KEY = import.meta.env.VITE_image_api || "";
 
 const Profile = () => {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const axiosSecure = useAxiosSecure();
 
-  const { data: donor = {}, refetch } = useQuery({
+  const { data: donor = [], refetch } = useQuery({
     queryKey: ["donor", user?.email],
     queryFn: async () => {
       const res = await axiosSecure.get(`/donors?email=${user?.email}`);
       return res.data[0];
     },
-    enabled: !!user?.email,
   });
+  //   console.log(donor);
 
   const [isEditing, setIsEditing] = useState(false);
-  const [avatarFile, setAvatarFile] = useState(null);
-  const [avatarPreview, setAvatarPreview] = useState(null);
-  const [saving, setSaving] = useState(false);
 
   const [toast, setToast] = useState({
     show: false,
     message: "",
     success: true,
   });
-  const showToast = (msg, success = true) => {
-    setToast({ show: true, message: msg, success });
-    setTimeout(
-      () => setToast({ show: false, message: "", success: true }),
-      4000
-    );
+
+  const showToast = (message, success = true) => {
+    setToast({ show: true, message, success });
+
+    setTimeout(() => {
+      setToast({ show: false, message: "", success: true });
+    }, 3000);
   };
 
-  const { register, handleSubmit, reset, watch } = useForm({
-    defaultValues: donor,
-  });
+  const { register, handleSubmit } = useForm();
 
-  // Initialize form only when donor data arrives
-  useEffect(() => {
-    if (donor && donor._id) {
-      reset(donor);
-      setAvatarPreview(donor.image);
+  const handleUpdateProfile = async (data) => {
+    console.log(data);
+    setIsEditing(false);
+    let imageUrl = donor.image;
+
+    if (data.image && data.image.length > 0) {
+      const formData = new FormData();
+      formData.append("key", import.meta.env.VITE_image_api);
+      formData.append("image", data.image[0]);
+
+      const imgRes = await axios.post(
+        "https://api.imgbb.com/1/upload",
+        formData
+      );
+
+      imageUrl = imgRes.data.data.url;
     }
-  }, [donor, reset]);
+    const updatedInfo = {
+      name: data.name || donor.name,
+      email: data.email || donor.email,
+      image: imageUrl,
+      bloodGroup: data.bloodGroup || donor.bloodGroup,
+      district: data.district || donor.district,
+      upazila: data.upazila || donor.upazila,
+    };
 
-  // Convert file to base64
-  const fileToBase64 = (file) =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result.split(",")[1]);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-
-  // Upload to ImgBB
-  const uploadToImgBB = async (file) => {
-    const base64 = await fileToBase64(file);
-    const form = new FormData();
-    form.append("key", IMGBB_API_KEY);
-    form.append("image", base64);
-
-    const res = await fetch("https://api.imgbb.com/1/upload", {
-      method: "POST",
-      body: form,
-    });
-    const json = await res.json();
-    if (!json.success) throw new Error("ImgBB upload failed");
-    return json.data.url;
-  };
-
-  const handleAvatarSelect = (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setAvatarFile(file);
-    setAvatarPreview(URL.createObjectURL(file));
-  };
-
-  const onSubmit = async (data) => {
-    setSaving(true);
-    try {
-      let finalAvatarUrl = donor.image;
-
-      if (avatarFile) {
-        finalAvatarUrl = await uploadToImgBB(avatarFile);
+    axiosSecure.put(`/donors/${donor._id}`, updatedInfo).then((res) => {
+      if (res.data.modifiedCount) {
+        showToast("Profile updated successfully ✅");
+        setIsEditing(false);
+        refetch();
+      } else {
+        showToast("No changes were made", false);
       }
+    });
 
-      const updatedData = {
-        ...data,
-        image: finalAvatarUrl,
-        modifiedAt: new Date(),
-      };
+    const updateProfile = {
+      displayName: data.name,
+      photoURL: imageUrl,
+    };
 
-      // Prevent updating _id or email
-      delete updatedData._id;
-      delete updatedData.email;
-
-      // Call backend
-      await axiosSecure.put(`/donors/${donor._id}`, updatedData);
-
-      // Update form with saved values
-      reset({ ...donor, ...updatedData, email: donor.email });
-      setAvatarPreview(finalAvatarUrl);
-      setAvatarFile(null);
-      setIsEditing(false);
-
-      refetch();
-      showToast("Profile updated successfully!");
-    } catch (err) {
-      showToast("Update failed: " + err.message, false);
-    } finally {
-      setSaving(false);
-    }
+    updateUser(updateProfile)
+      .then(() => {
+        console.log("user profile updated");
+        //   navigate(location?.state || "/");
+      })
+      .catch((error) => {
+        console.log(error);
+        showToast("Profile update failed ❌", false);
+      });
   };
 
   return (
@@ -132,22 +104,12 @@ const Profile = () => {
           {/* Header */}
           <div className="flex justify-between items-center p-6 border-b">
             <h1 className="text-2xl font-bold">Your Profile</h1>
-            {!isEditing ? (
+            {isEditing === false && (
               <button
                 onClick={() => setIsEditing(true)}
                 className="btn btn-primary btn-sm flex gap-2"
               >
                 <FiEdit2 /> Edit
-              </button>
-            ) : (
-              <button
-                type="submit"
-                form="profileForm"
-                className={`btn btn-success btn-sm flex gap-2 ${
-                  saving ? "loading" : ""
-                }`}
-              >
-                <FiSave /> {saving ? "Saving..." : "Save"}
               </button>
             )}
           </div>
@@ -155,7 +117,7 @@ const Profile = () => {
           {/* Form */}
           <form
             id="profileForm"
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(handleUpdateProfile)}
             className="p-6"
           >
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -163,7 +125,7 @@ const Profile = () => {
               <div className="flex flex-col items-center space-y-3">
                 <div className="w-32 h-32 rounded-full overflow-hidden shadow ring ring-primary ring-offset-2">
                   <img
-                    src={avatarPreview}
+                    src={donor.image}
                     alt="avatar"
                     className="object-cover w-full h-full"
                   />
@@ -177,9 +139,8 @@ const Profile = () => {
                   Choose File
                   <input
                     type="file"
-                    accept="image/*"
+                    {...register("image")}
                     className="hidden"
-                    onChange={handleAvatarSelect}
                     disabled={!isEditing}
                   />
                 </label>
@@ -187,10 +148,11 @@ const Profile = () => {
 
               {/* Inputs */}
               <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="form-control">
+                <div className="fieldset">
                   <label className="label font-medium">Name</label>
                   <input
                     {...register("name")}
+                    defaultValue={donor.name}
                     disabled={!isEditing}
                     className="input input-bordered"
                   />
@@ -200,6 +162,7 @@ const Profile = () => {
                   <label className="label font-medium">Email</label>
                   <input
                     {...register("email")}
+                    defaultValue={donor.email}
                     disabled
                     className="input input-bordered bg-gray-100 cursor-not-allowed"
                   />
@@ -209,6 +172,7 @@ const Profile = () => {
                   <label className="label font-medium">District</label>
                   <input
                     {...register("district")}
+                    defaultValue={donor.district}
                     disabled={!isEditing}
                     className="input input-bordered"
                   />
@@ -218,6 +182,7 @@ const Profile = () => {
                   <label className="label font-medium">Upazila</label>
                   <input
                     {...register("upazila")}
+                    defaultValue={donor.upazila}
                     disabled={!isEditing}
                     className="input input-bordered"
                   />
@@ -229,7 +194,7 @@ const Profile = () => {
                     {...register("bloodGroup")}
                     disabled={!isEditing}
                     className="select select-bordered w-full"
-                    defaultValue={donor.bloodGroup || "A+"}
+                    defaultValue={donor.bloodGroup}
                   >
                     <option>A+</option>
                     <option>A−</option>
@@ -243,6 +208,15 @@ const Profile = () => {
                 </div>
               </div>
             </div>
+            {isEditing === true && (
+              <button
+                type="submit"
+                form="profileForm"
+                className={`btn btn-success btn-sm flex gap-2`}
+              >
+                <FiSave /> save
+              </button>
+            )}
           </form>
 
           {/* Footer */}
