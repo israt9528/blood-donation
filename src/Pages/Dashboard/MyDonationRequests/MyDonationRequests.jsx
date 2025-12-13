@@ -43,6 +43,27 @@ const MyDonationRequests = () => {
     });
   };
 
+  const handleDonationStatusUpdate = (request, status) => {
+    const statusInfo = {
+      donationStatus: status,
+    };
+    let message = `Donation status updated to ${status}`;
+    axiosSecure
+      .patch(`/requests/${request._id}/status`, statusInfo)
+      .then((res) => {
+        if (res.data.modifiedCount) {
+          refetch();
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: message,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      });
+  };
+
   return (
     <div>
       <div className="overflow-x-auto">
@@ -102,8 +123,20 @@ const MyDonationRequests = () => {
                   </Link>
                   {r.donationStatus === "inprogress" && (
                     <>
-                      <button className="btn">Done</button>
-                      <button className="btn">Cancel</button>
+                      <button
+                        onClick={() => handleDonationStatusUpdate(r, "done")}
+                        className="btn"
+                      >
+                        Done
+                      </button>
+                      <button
+                        onClick={() =>
+                          handleDonationStatusUpdate(r, "canceled")
+                        }
+                        className="btn"
+                      >
+                        Cancel
+                      </button>
                     </>
                   )}
                 </td>
