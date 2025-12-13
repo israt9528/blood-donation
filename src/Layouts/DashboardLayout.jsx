@@ -3,6 +3,7 @@ import { CgProfile } from "react-icons/cg";
 import { NavLink, Outlet } from "react-router";
 import { VscGitPullRequestNewChanges } from "react-icons/vsc";
 import { BiDonateBlood } from "react-icons/bi";
+import { FaUser } from "react-icons/fa";
 
 const DashboardLayout = () => {
   return (
@@ -75,6 +76,17 @@ const DashboardLayout = () => {
 
               <li>
                 <NavLink
+                  to="/dashboard/all-users"
+                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                  data-tip="All Users"
+                >
+                  <FaUser size={16} />
+
+                  <span className="is-drawer-close:hidden">All Users</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
                   to="/dashboard/profile"
                   className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                   data-tip="My Profile"
@@ -88,12 +100,12 @@ const DashboardLayout = () => {
                 <NavLink
                   to="/dashboard/my-donation-requests"
                   className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                  data-tip="My donation request"
+                  data-tip="My donation requests"
                 >
                   <BiDonateBlood size={16} />
 
                   <span className="is-drawer-close:hidden">
-                    My Donation Request
+                    My Donation Requests
                   </span>
                 </NavLink>
               </li>
