@@ -17,6 +17,7 @@ import AllUsers from "../Pages/Dashboard/AllUsers/AllUsers";
 import AdminRoute from "./AdminRoute";
 import AllBloodDonationRequest from "../Pages/Dashboard/AllBloodDonationRequest/AllBloodDonationRequest";
 import AllBloodDonationRequestVolunteer from "../Pages/Dashboard/Volunteer/AllBloodDonationRequestVolunteer/AllBloodDonationRequestVolunteer";
+import VolunteerRoute from "./VolunteerRoute";
 
 export const router = createBrowserRouter([
   {
@@ -83,7 +84,9 @@ export const router = createBrowserRouter([
       {
         path: "all-blood-donation-request/volunteer",
         element: (
-          <AllBloodDonationRequestVolunteer></AllBloodDonationRequestVolunteer>
+          <VolunteerRoute>
+            <AllBloodDonationRequestVolunteer></AllBloodDonationRequestVolunteer>
+          </VolunteerRoute>
         ),
       },
       {

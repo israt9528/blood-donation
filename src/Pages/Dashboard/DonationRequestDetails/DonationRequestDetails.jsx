@@ -70,7 +70,7 @@ const DonationRequestDetails = () => {
           showConfirmButton: false,
           timer: 1500,
         });
-        navigate("/dashboard/my-donation-requests");
+        navigate(-1);
       }
     });
   };

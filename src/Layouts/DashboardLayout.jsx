@@ -120,23 +120,20 @@ const DashboardLayout = () => {
               )}
 
               {role === "volunteer" && (
-                <>
-                  <li>
-                    <NavLink
-                      to="/dashboard/all-blood-donation-request/volunteer"
-                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                      data-tip="All Blood Donation Request"
-                    >
-                      <BiSolidDonateBlood size={18} />
+                <li>
+                  <NavLink
+                    to="/dashboard/all-blood-donation-request/volunteer"
+                    className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                    data-tip="All Blood Donation Request"
+                  >
+                    <BiSolidDonateBlood size={18} />
 
-                      <span className="is-drawer-close:hidden">
-                        All Blood Donation Request
-                      </span>
-                    </NavLink>
-                  </li>
-                </>
+                    <span className="is-drawer-close:hidden">
+                      All Blood Donation Request
+                    </span>
+                  </NavLink>
+                </li>
               )}
-
               {role === "donor" && (
                 <>
                   <li>

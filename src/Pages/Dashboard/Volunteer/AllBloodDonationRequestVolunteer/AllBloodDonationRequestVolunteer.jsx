@@ -2,6 +2,7 @@ import React from "react";
 import useAxiosSecure from "../../../../Hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
+import { Link } from "react-router";
 
 const AllBloodDonationRequestVolunteer = () => {
   const axiosSecure = useAxiosSecure();
@@ -13,6 +14,8 @@ const AllBloodDonationRequestVolunteer = () => {
       return res.data;
     },
   });
+  console.log(requests);
+
   const handleDonationStatusUpdate = (request, status) => {
     const statusInfo = {
       donationStatus: status,
@@ -78,12 +81,6 @@ const AllBloodDonationRequestVolunteer = () => {
                     className="btn"
                   >
                     View
-                  </Link>
-                  <Link
-                    to={`/dashboard/update-donation-request/${r._id}`}
-                    className="btn"
-                  >
-                    Edit
                   </Link>
 
                   {r.donationStatus === "inprogress" && (

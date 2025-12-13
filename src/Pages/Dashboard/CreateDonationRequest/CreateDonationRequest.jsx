@@ -5,11 +5,20 @@ import { motion } from "framer-motion";
 import useAuth from "../../../Hooks/useAuth";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
 
 const CreateDonationRequest = () => {
   const { register, handleSubmit, reset } = useForm();
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+
+  const { data: donor = [] } = useQuery({
+    queryKey: ["donor", user?.email],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/donors?email=${user?.email}`);
+      return res.data[0];
+    },
+  });
 
   const handleCreateRequest = (data) => {
     console.log(data);
@@ -196,7 +205,11 @@ const CreateDonationRequest = () => {
 
             {/* Submit Button */}
             <div className="text-center">
-              <button type="submit" className="btn btn-primary gap-2 px-6 py-2">
+              <button
+                type="submit"
+                className="btn btn-primary gap-2 px-6 py-2"
+                disabled={donor.status === "blocked"}
+              >
                 <FiSend />
                 Submit Request
               </button>
