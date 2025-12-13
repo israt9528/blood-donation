@@ -2,7 +2,7 @@ import React from "react";
 import { CgProfile } from "react-icons/cg";
 import { NavLink, Outlet } from "react-router";
 import { VscGitPullRequestNewChanges } from "react-icons/vsc";
-import { BiDonateBlood } from "react-icons/bi";
+import { BiDonateBlood, BiSolidDonateBlood } from "react-icons/bi";
 import { FaUser } from "react-icons/fa";
 import useRole from "../Hooks/useRole";
 
@@ -101,6 +101,37 @@ const DashboardLayout = () => {
                       <FaUser size={16} />
 
                       <span className="is-drawer-close:hidden">All Users</span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/dashboard/all-blood-donation-request"
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                      data-tip="All Blood Donation Request"
+                    >
+                      <BiSolidDonateBlood size={18} />
+
+                      <span className="is-drawer-close:hidden">
+                        All Blood Donation Request
+                      </span>
+                    </NavLink>
+                  </li>
+                </>
+              )}
+
+              {role === "volunteer" && (
+                <>
+                  <li>
+                    <NavLink
+                      to="/dashboard/all-blood-donation-request/volunteer"
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                      data-tip="All Blood Donation Request"
+                    >
+                      <BiSolidDonateBlood size={18} />
+
+                      <span className="is-drawer-close:hidden">
+                        All Blood Donation Request
+                      </span>
                     </NavLink>
                   </li>
                 </>
