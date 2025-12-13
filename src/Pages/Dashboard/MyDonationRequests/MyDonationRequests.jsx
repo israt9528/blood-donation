@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import useAuth from "../../../Hooks/useAuth";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 const MyDonationRequests = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+  const [statusFilter, setStatusFilter] = useState("all");
 
   const { data: requests = [], refetch } = useQuery({
     queryKey: ["myRequests", user?.email],
@@ -16,6 +17,11 @@ const MyDonationRequests = () => {
       return res.data;
     },
   });
+
+  const filteredRequests =
+    statusFilter === "all"
+      ? requests
+      : requests.filter((r) => r.donationStatus === statusFilter);
 
   const handleRequestDelete = (id) => {
     console.log(id);
@@ -67,12 +73,29 @@ const MyDonationRequests = () => {
   return (
     <div>
       <div className="overflow-x-auto">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-lg font-semibold">
+            My Donation Requests ({filteredRequests.length})
+          </h2>
+
+          <select
+            className="select select-bordered max-w-xs"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="all">All</option>
+            <option value="pending">Pending</option>
+            <option value="inprogress">In Progress</option>
+            <option value="done">Done</option>
+            <option value="canceled">Canceled</option>
+          </select>
+        </div>
         <table className="table table-zebra">
           {/* head */}
           <thead>
             <tr>
               <th></th>
-              <th>Recipient Name {requests.length}</th>
+              <th>Recipient Name</th>
               <th>Recipient Location</th>
               <th>Donation Date</th>
               <th>Donation Time</th>
@@ -85,7 +108,7 @@ const MyDonationRequests = () => {
           </thead>
           <tbody>
             {/* row 1 */}
-            {requests.map((r, i) => (
+            {filteredRequests.map((r, i) => (
               <tr key={r._id}>
                 <th>{i + 1}</th>
                 <td>{r.recipientName}</td>

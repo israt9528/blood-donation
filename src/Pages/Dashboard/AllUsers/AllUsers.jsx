@@ -1,21 +1,25 @@
-import React from "react";
-import useAxios from "../../../Hooks/useAxios";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { HiDotsVertical } from "react-icons/hi";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 
 const AllUsers = () => {
-  const axiosInstance = useAxios();
   const axiosSecure = useAxiosSecure();
+  const [statusFilter, setStatusFilter] = useState("all");
 
   const { data: donors = [], refetch } = useQuery({
     queryKey: ["donors"],
     queryFn: async () => {
-      const res = await axiosInstance.get("/donors");
+      const res = await axiosSecure.get("/donors");
       return res.data;
     },
   });
+
+  const filteredDonors =
+    statusFilter === "all"
+      ? donors
+      : donors.filter((d) => d.status === statusFilter);
 
   const handleDonorStatus = (donor, status) => {
     const donorStatus = {
@@ -61,6 +65,22 @@ const AllUsers = () => {
   return (
     <div>
       <div className="overflow-x-auto">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-lg font-semibold">
+            All Users ({filteredDonors.length})
+          </h2>
+
+          <select
+            className="select select-bordered max-w-xs"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="all">All Users</option>
+            <option value="active">Active</option>
+            <option value="blocked">Blocked</option>
+          </select>
+        </div>
+
         <table className="table">
           {/* head */}
           <thead>
@@ -76,7 +96,7 @@ const AllUsers = () => {
           </thead>
           <tbody>
             {/* row 1 */}
-            {donors.map((d, i) => (
+            {filteredDonors.map((d, i) => (
               <tr key={i + 1}>
                 <td>
                   <div className="flex items-center gap-3">
