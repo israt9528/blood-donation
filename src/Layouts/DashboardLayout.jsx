@@ -4,8 +4,12 @@ import { NavLink, Outlet } from "react-router";
 import { VscGitPullRequestNewChanges } from "react-icons/vsc";
 import { BiDonateBlood } from "react-icons/bi";
 import { FaUser } from "react-icons/fa";
+import useRole from "../Hooks/useRole";
 
 const DashboardLayout = () => {
+  const { role } = useRole();
+  console.log(role);
+
   return (
     <div>
       <div className="drawer lg:drawer-open">
@@ -76,17 +80,6 @@ const DashboardLayout = () => {
 
               <li>
                 <NavLink
-                  to="/dashboard/all-users"
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                  data-tip="All Users"
-                >
-                  <FaUser size={16} />
-
-                  <span className="is-drawer-close:hidden">All Users</span>
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
                   to="/dashboard/profile"
                   className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                   data-tip="My Profile"
@@ -96,32 +89,53 @@ const DashboardLayout = () => {
                   <span className="is-drawer-close:hidden">My Profile</span>
                 </NavLink>
               </li>
-              <li>
-                <NavLink
-                  to="/dashboard/my-donation-requests"
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                  data-tip="My donation requests"
-                >
-                  <BiDonateBlood size={16} />
 
-                  <span className="is-drawer-close:hidden">
-                    My Donation Requests
-                  </span>
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  to="/dashboard/create-donation-request"
-                  className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                  data-tip="Create donation request"
-                >
-                  <VscGitPullRequestNewChanges size={16} />
+              {role === "admin" && (
+                <>
+                  <li>
+                    <NavLink
+                      to="/dashboard/all-users"
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                      data-tip="All Users"
+                    >
+                      <FaUser size={16} />
 
-                  <span className="is-drawer-close:hidden">
-                    Create Donation Request
-                  </span>
-                </NavLink>
-              </li>
+                      <span className="is-drawer-close:hidden">All Users</span>
+                    </NavLink>
+                  </li>
+                </>
+              )}
+
+              {role === "donor" && (
+                <>
+                  <li>
+                    <NavLink
+                      to="/dashboard/my-donation-requests"
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                      data-tip="My donation requests"
+                    >
+                      <BiDonateBlood size={16} />
+
+                      <span className="is-drawer-close:hidden">
+                        My Donation Requests
+                      </span>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/dashboard/create-donation-request"
+                      className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                      data-tip="Create donation request"
+                    >
+                      <VscGitPullRequestNewChanges size={16} />
+
+                      <span className="is-drawer-close:hidden">
+                        Create Donation Request
+                      </span>
+                    </NavLink>
+                  </li>
+                </>
+              )}
 
               {/* List item */}
               <li>
