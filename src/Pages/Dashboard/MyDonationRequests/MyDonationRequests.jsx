@@ -11,12 +11,13 @@ const MyDonationRequests = () => {
   const [statusFilter, setStatusFilter] = useState("all");
 
   const { data: requests = [], refetch } = useQuery({
-    queryKey: ["myRequests", user?.email],
+    queryKey: ["requests", user?.email],
     queryFn: async () => {
       const res = await axiosSecure.get(`/requests?email=${user.email}`);
       return res.data;
     },
   });
+  console.log(requests);
 
   const filteredRequests =
     statusFilter === "all"

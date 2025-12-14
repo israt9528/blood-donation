@@ -8,7 +8,7 @@ import useRole from "../Hooks/useRole";
 
 const DashboardLayout = () => {
   const { role } = useRole();
-  console.log(role);
+  //   console.log(role);
 
   return (
     <div>

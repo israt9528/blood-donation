@@ -1,20 +1,24 @@
-import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
+import useAuth from "../../../Hooks/useAuth";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
+import { Link, useNavigate } from "react-router";
 import Swal from "sweetalert2";
-import { Link } from "react-router";
 
-const AllBloodDonationRequest = () => {
+const MyDonationRequests = () => {
+  const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
   const [statusFilter, setStatusFilter] = useState("all");
+  const navigate = useNavigate();
 
   const { data: requests = [], refetch } = useQuery({
-    queryKey: ["requests"],
+    queryKey: ["requests", user?.email],
     queryFn: async () => {
-      const res = await axiosSecure.get("/requests/all");
+      const res = await axiosSecure.get(`/requests/latest?email=${user.email}`);
       return res.data;
     },
   });
+  console.log(requests);
 
   const filteredRequests =
     statusFilter === "all"
@@ -71,9 +75,10 @@ const AllBloodDonationRequest = () => {
   return (
     <div>
       <div className="overflow-x-auto">
+        <h1>Welcome {user.displayName}</h1>
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold">
-            All Donation Requests ({filteredRequests.length})
+            My Donation Requests ({filteredRequests.length})
           </h2>
 
           <select
@@ -93,7 +98,7 @@ const AllBloodDonationRequest = () => {
           <thead>
             <tr>
               <th></th>
-              <th>Recipient Name {requests.length}</th>
+              <th>Recipient Name</th>
               <th>Recipient Location</th>
               <th>Donation Date</th>
               <th>Donation Time</th>
@@ -166,8 +171,14 @@ const AllBloodDonationRequest = () => {
           </tbody>
         </table>
       </div>
+      <button
+        onClick={() => navigate("/dashboard/my-donation-requests")}
+        className="btn"
+      >
+        View my all request
+      </button>
     </div>
   );
 };
 
-export default AllBloodDonationRequest;
+export default MyDonationRequests;
