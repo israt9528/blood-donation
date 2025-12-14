@@ -18,6 +18,7 @@ import AdminRoute from "./AdminRoute";
 import AllBloodDonationRequest from "../Pages/Dashboard/AllBloodDonationRequest/AllBloodDonationRequest";
 import AllBloodDonationRequestVolunteer from "../Pages/Dashboard/Volunteer/AllBloodDonationRequestVolunteer/AllBloodDonationRequestVolunteer";
 import VolunteerRoute from "./VolunteerRoute";
+import SearchDonors from "../Pages/SearchDonors/SearchDonors";
 
 export const router = createBrowserRouter([
   {
@@ -31,6 +32,11 @@ export const router = createBrowserRouter([
       {
         path: "donation-requests",
         Component: DonationRequests,
+      },
+      {
+        path: "search-donors",
+        Component: SearchDonors,
+        loader: () => fetch("/districtsInfo.json").then((res) => res.json()),
       },
     ],
   },

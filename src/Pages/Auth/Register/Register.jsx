@@ -27,7 +27,7 @@ const Register = () => {
         setUpazilas(data);
       });
   }, []);
-  console.log(upazilas);
+  // console.log(upazilas);
 
   const districts = districtsData.map((d) => d.name);
   //   console.log(districts);
