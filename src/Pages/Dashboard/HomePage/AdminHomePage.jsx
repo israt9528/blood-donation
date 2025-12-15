@@ -39,6 +39,15 @@ const AdminHomePage = () => {
     },
   });
 
+  const { data: funds = [], isLoading: fundingLoading } = useQuery({
+    queryKey: ["funds"],
+    queryFn: async () => {
+      const res = await axiosSecure("/funds");
+      return res.data;
+    },
+  });
+  const totalFund = funds.reduce((sum, f) => sum + Number(f.amount), 0);
+
   /* Stats AFTER data fetching */
   const stats = [
     {
@@ -49,7 +58,7 @@ const AdminHomePage = () => {
     },
     {
       title: "Total Funding",
-      value: "$48,200", // replace later with real API
+      value: fundingLoading ? "..." : `$${totalFund.toLocaleString()}`,
       icon: <FaHandHoldingHeart className="text-4xl" />,
       gradient: "from-emerald-500 to-teal-500",
     },

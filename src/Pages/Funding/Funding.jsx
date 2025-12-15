@@ -13,7 +13,7 @@ const Funding = () => {
   const { data: funds = [] } = useQuery({
     queryKey: ["funds"],
     queryFn: async () => {
-      const res = await axiosSecure("/funding");
+      const res = await axiosSecure("/funds");
       return res.data;
     },
   });
