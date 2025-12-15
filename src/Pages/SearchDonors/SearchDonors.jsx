@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import searchImg from "../../assets/search.jpeg";
 
 const SearchDonors = () => {
-  const { register, handleSubmit, watch, reset } = useForm();
+  const { register, handleSubmit, watch } = useForm();
   const axiosInstance = useAxios();
   const [search, setSearch] = useState([]);
   const districtsData = useLoaderData();
@@ -42,8 +42,6 @@ const SearchDonors = () => {
         },
       })
       .then((res) => setSearch(res.data));
-
-    reset();
   };
 
   const cardVariants = {

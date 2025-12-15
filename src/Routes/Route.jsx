@@ -19,6 +19,9 @@ import AllBloodDonationRequest from "../Pages/Dashboard/AllBloodDonationRequest/
 import AllBloodDonationRequestVolunteer from "../Pages/Dashboard/Volunteer/AllBloodDonationRequestVolunteer/AllBloodDonationRequestVolunteer";
 import VolunteerRoute from "./VolunteerRoute";
 import SearchDonors from "../Pages/SearchDonors/SearchDonors";
+import Funding from "../Pages/Funding/Funding";
+import FundSuccessful from "../Pages/Funding/FundSuccessful";
+import FundCancelled from "../Pages/Funding/FundCancelled";
 
 export const router = createBrowserRouter([
   {
@@ -37,6 +40,30 @@ export const router = createBrowserRouter([
         path: "search-donors",
         Component: SearchDonors,
         loader: () => fetch("/districtsInfo.json").then((res) => res.json()),
+      },
+      {
+        path: "funding",
+        element: (
+          <PrivateRoute>
+            <Funding></Funding>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "fund-successful",
+        element: (
+          <PrivateRoute>
+            <FundSuccessful></FundSuccessful>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "fund-cancelled",
+        element: (
+          <PrivateRoute>
+            <FundCancelled></FundCancelled>
+          </PrivateRoute>
+        ),
       },
     ],
   },

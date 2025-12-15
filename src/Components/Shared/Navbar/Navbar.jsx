@@ -27,6 +27,11 @@ const Navbar = () => {
       <li>
         <NavLink to="/donation-requests">Donation Requests</NavLink>
       </li>
+      {user && (
+        <li>
+          <NavLink to="/funding">Funding</NavLink>
+        </li>
+      )}
     </>
   );
 
@@ -65,7 +70,7 @@ const Navbar = () => {
       </div>
       <div className="navbar-end">
         {user ? (
-          <div className="dropdown">
+          <div className="dropdown dropdown-left">
             <img
               tabIndex={0}
               src={user?.photoURL}
