@@ -5,6 +5,7 @@ import { VscGitPullRequestNewChanges } from "react-icons/vsc";
 import { BiDonateBlood, BiSolidDonateBlood } from "react-icons/bi";
 import { FaUser } from "react-icons/fa";
 import useRole from "../Hooks/useRole";
+import Logo from "../Components/Shared/Logo/Logo";
 
 const DashboardLayout = () => {
   const { role } = useRole();
@@ -12,7 +13,7 @@ const DashboardLayout = () => {
 
   return (
     <div>
-      <div className="drawer lg:drawer-open">
+      <div className="drawer lg:drawer-open ">
         <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content">
           {/* Navbar */}
@@ -54,6 +55,9 @@ const DashboardLayout = () => {
             {/* Sidebar content here */}
             <ul className="menu w-full grow">
               {/* List item */}
+              <li>
+                <Logo></Logo>
+              </li>
               <li>
                 <NavLink
                   to="/dashboard"

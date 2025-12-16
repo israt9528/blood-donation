@@ -7,23 +7,19 @@ import { FiEdit2, FiSave, FiUpload, FiCheckCircle } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 
-// const IMGBB_API_KEY = import.meta.env.VITE_image_api || "";
-
 const Profile = () => {
   const { user, updateUser } = useAuth();
   const axiosSecure = useAxiosSecure();
 
-  const { data: donor = [], refetch } = useQuery({
+  const { data: donor = {}, refetch } = useQuery({
     queryKey: ["donor", user?.email],
     queryFn: async () => {
       const res = await axiosSecure.get(`/donors?email=${user?.email}`);
       return res.data[0];
     },
   });
-  //   console.log(donor);
 
   const [isEditing, setIsEditing] = useState(false);
-
   const [toast, setToast] = useState({
     show: false,
     message: "",
@@ -32,16 +28,12 @@ const Profile = () => {
 
   const showToast = (message, success = true) => {
     setToast({ show: true, message, success });
-
-    setTimeout(() => {
-      setToast({ show: false, message: "", success: true });
-    }, 3000);
+    setTimeout(() => setToast({ show: false }), 3000);
   };
 
   const { register, handleSubmit } = useForm();
 
   const handleUpdateProfile = async (data) => {
-    console.log(data);
     setIsEditing(false);
     let imageUrl = donor.image;
 
@@ -54,12 +46,12 @@ const Profile = () => {
         "https://api.imgbb.com/1/upload",
         formData
       );
-
       imageUrl = imgRes.data.data.url;
     }
+
     const updatedInfo = {
       name: data.name || donor.name,
-      email: data.email || donor.email,
+      email: donor.email,
       image: imageUrl,
       bloodGroup: data.bloodGroup || donor.bloodGroup,
       district: data.district || donor.district,
@@ -69,47 +61,47 @@ const Profile = () => {
     axiosSecure.put(`/donors/${donor._id}`, updatedInfo).then((res) => {
       if (res.data.modifiedCount) {
         showToast("Profile updated successfully ✅");
-        setIsEditing(false);
         refetch();
       } else {
         showToast("No changes were made", false);
       }
     });
 
-    const updateProfile = {
-      displayName: data.name,
-      photoURL: imageUrl,
-    };
-
-    updateUser(updateProfile)
-      .then(() => {
-        console.log("user profile updated");
-        //   navigate(location?.state || "/");
-      })
-      .catch((error) => {
-        console.log(error);
-        showToast("Profile update failed ❌", false);
-      });
+    updateUser({ displayName: data.name, photoURL: imageUrl }).catch(() =>
+      showToast("Profile update failed ❌", false)
+    );
   };
 
   return (
-    <div className="min-h-screen bg-base-200 py-10 px-4">
-      <div className="max-w-3xl mx-auto">
+    <div className="min-h-screen bg-base-200 px-4 py-12">
+      <div className="mx-auto max-w-4xl">
+        {/* Page Title */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-800">Profile Settings</h1>
+          <p className="mt-1 text-gray-500">
+            View and update your personal information
+          </p>
+        </div>
+
+        {/* Card */}
         <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="card bg-white shadow-xl rounded-2xl overflow-hidden"
+          className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl overflow-hidden"
         >
           {/* Header */}
-          <div className="flex justify-between items-center p-6 border-b">
-            <h1 className="text-2xl font-bold">Your Profile</h1>
-            {isEditing === false && (
+          <div className="flex items-center justify-between border-b px-6 py-5">
+            <h2 className="text-xl font-semibold text-gray-800">
+              Personal Information
+            </h2>
+
+            {!isEditing && (
               <button
                 onClick={() => setIsEditing(true)}
-                className="btn btn-primary btn-sm flex gap-2"
+                className="btn btn-sm bg-red-600 text-white hover:bg-red-700 border-none gap-2"
               >
-                <FiEdit2 /> Edit
+                <FiEdit2 /> Edit Profile
               </button>
             )}
           </div>
@@ -118,25 +110,26 @@ const Profile = () => {
           <form
             id="profileForm"
             onSubmit={handleSubmit(handleUpdateProfile)}
-            className="p-6"
+            className="px-6 py-8"
           >
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
               {/* Avatar */}
-              <div className="flex flex-col items-center space-y-3">
-                <div className="w-32 h-32 rounded-full overflow-hidden shadow ring ring-primary ring-offset-2">
+              <div className="flex flex-col items-center">
+                <div className="relative h-36 w-36 overflow-hidden rounded-full ring-4 ring-red-500/30">
                   <img
                     src={donor.image}
                     alt="avatar"
-                    className="object-cover w-full h-full"
+                    className="h-full w-full object-cover"
                   />
                 </div>
+
                 <label
-                  className={`btn btn-outline btn-sm gap-2 ${
-                    !isEditing ? "opacity-50 pointer-events-none" : ""
+                  className={`btn btn-outline btn-sm mt-4 gap-2 ${
+                    !isEditing && "pointer-events-none opacity-50"
                   }`}
                 >
                   <FiUpload />
-                  Choose File
+                  Change Photo
                   <input
                     type="file"
                     {...register("image")}
@@ -147,55 +140,55 @@ const Profile = () => {
               </div>
 
               {/* Inputs */}
-              <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="fieldset">
+              <div className="md:col-span-2 grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <div>
                   <label className="label font-medium">Name</label>
                   <input
                     {...register("name")}
                     defaultValue={donor.name}
                     disabled={!isEditing}
-                    className="input input-bordered"
+                    className="input input-bordered w-full"
                   />
                 </div>
 
-                <div className="form-control">
+                <div>
                   <label className="label font-medium">Email</label>
                   <input
-                    {...register("email")}
                     defaultValue={donor.email}
                     disabled
-                    className="input input-bordered bg-gray-100 cursor-not-allowed"
+                    className="input input-bordered w-full bg-gray-100"
                   />
                 </div>
 
-                <div className="form-control">
+                <div>
                   <label className="label font-medium">District</label>
                   <input
                     {...register("district")}
                     defaultValue={donor.district}
                     disabled={!isEditing}
-                    className="input input-bordered"
+                    className="input input-bordered w-full"
                   />
                 </div>
 
-                <div className="form-control">
+                <div>
                   <label className="label font-medium">Upazila</label>
                   <input
                     {...register("upazila")}
                     defaultValue={donor.upazila}
                     disabled={!isEditing}
-                    className="input input-bordered"
+                    className="input input-bordered w-full"
                   />
                 </div>
 
-                <div className="form-control md:col-span-2">
+                <div className="sm:col-span-2">
                   <label className="label font-medium">Blood Group</label>
                   <select
                     {...register("bloodGroup")}
                     disabled={!isEditing}
-                    className="select select-bordered w-full"
                     defaultValue={donor.bloodGroup}
+                    className="select select-bordered w-full"
                   >
+                    <option>{donor.bloodGroup}</option>
                     <option>A+</option>
                     <option>A−</option>
                     <option>B+</option>
@@ -208,24 +201,26 @@ const Profile = () => {
                 </div>
               </div>
             </div>
-            {isEditing === true && (
-              <button
-                type="submit"
-                form="profileForm"
-                className={`btn btn-success btn-sm flex gap-2`}
-              >
-                <FiSave /> save
-              </button>
+
+            {isEditing && (
+              <div className="mt-8 flex justify-end">
+                <button
+                  type="submit"
+                  className="btn bg-green-600 text-white hover:bg-green-700 gap-2"
+                >
+                  <FiSave /> Save Changes
+                </button>
+              </div>
             )}
           </form>
 
           {/* Footer */}
-          <div className="p-4 border-t text-sm text-gray-600 flex justify-between">
+          <div className="flex items-center justify-between border-t bg-base-100 px-6 py-4 text-sm text-gray-600">
             <div className="flex items-center gap-2">
-              <FiCheckCircle className="text-success" />
-              <span>{isEditing ? "Editing…" : "Ready"}</span>
+              <FiCheckCircle className="text-green-500" />
+              {isEditing ? "Editing profile…" : "Profile is up to date"}
             </div>
-            <small>Last updated: just now</small>
+            <span>Last updated: just now</span>
           </div>
         </motion.div>
       </div>
@@ -234,17 +229,17 @@ const Profile = () => {
       <AnimatePresence>
         {toast.show && (
           <motion.div
-            initial={{ y: 50, opacity: 0 }}
+            initial={{ y: 40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 50, opacity: 0 }}
-            className="fixed right-4 bottom-6 z-50"
+            exit={{ y: 40, opacity: 0 }}
+            className="fixed bottom-6 right-4 z-50"
           >
             <div
-              className={`alert ${
+              className={`alert shadow-lg ${
                 toast.success ? "alert-success" : "alert-error"
-              } shadow-lg`}
+              }`}
             >
-              <span>{toast.message}</span>
+              {toast.message}
             </div>
           </motion.div>
         )}

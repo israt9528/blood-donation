@@ -1,2 +1,25 @@
 @import "tailwindcss";
-@plugin "daisyui";
+@plugin "daisyui" {
+    themes: light --default;
+}
+
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  --color-primary: 	#c80004;
+  --color-secondary: #6f0202;
+  --color-accent: #606060;
+  --color-base-200: #FAFDF0;
+}
+ 
+
+li a.active {
+    background-color: #c80004;
+    color: white;
+    border-radius: 20px;
+}
+
+li a:hover {
+    color: white;
+    background-color: #c80004;
+}

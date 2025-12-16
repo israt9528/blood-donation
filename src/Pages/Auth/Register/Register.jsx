@@ -50,7 +50,7 @@ const Register = () => {
 
     registerUser(data.email, data.password)
       .then((res) => {
-        // console.log(res.user);
+        console.log(res.user);
 
         const formData = new FormData();
         formData.append("image", profileImg);
@@ -219,7 +219,7 @@ const Register = () => {
                 value === watch("password") || "Passwords do not match",
             })}
             className="input w-full"
-            placeholder="Confirm Your Password"
+            placeholder="Re-enter Your Password"
           />
           {errors.confirmPassword && (
             <p className="text-red-700">{errors.confirmPassword.message}</p>

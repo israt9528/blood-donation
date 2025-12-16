@@ -28,15 +28,15 @@ const UpdateDonationRequest = () => {
     console.log(data);
 
     const updatedRequest = {
-      recipientName: data.recipientName,
-      recipientDistrict: data.recipientDistrict,
-      recipientUpazila: data.recipientUpazila,
-      fullAddress: data.fullAddress,
-      hospitalName: data.hospitalName,
-      donationDate: data.donationDate,
-      donationTime: data.donationTime,
-      bloodGroup: data.bloodGroup,
-      requestMessage: data.requestMessage,
+      recipientName: data.recipientName || request.recipientName,
+      recipientDistrict: data.recipientDistrict || request.recipientDistrict,
+      recipientUpazila: data.recipientUpazila || request.recipientUpazila,
+      fullAddress: data.fullAddress || request.fullAddress,
+      hospitalName: data.hospitalName || request.hospitalName,
+      donationDate: data.donationDate || request.donationDate,
+      donationTime: data.donationTime || request.donationTime,
+      bloodGroup: data.bloodGroup || request.bloodGroup,
+      requestMessage: data.requestMessage || request.requestMessage,
     };
 
     axiosSecure.put(`/requests/${id}`, updatedRequest).then((res) => {

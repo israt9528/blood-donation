@@ -19,6 +19,7 @@ const CreateDonationRequest = () => {
       return res.data[0];
     },
   });
+  console.log(user);
 
   const handleCreateRequest = (data) => {
     console.log(data);
