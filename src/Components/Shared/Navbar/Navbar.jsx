@@ -54,7 +54,7 @@ const Navbar = () => {
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-300 rounded-full shadow bg-red-200/5
+      className={`sticky top-0 z-50 transition-all duration-300 shadow bg-red-200/5
         ${scrolled ? "shadow-xl backdrop-blur-xl" : "backdrop-blur-md "}`}
     >
       <div className="navbar max-w-7xl mx-auto px-4 text-black">
