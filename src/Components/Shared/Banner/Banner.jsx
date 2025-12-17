@@ -1,126 +1,152 @@
-// Banner.jsx – Animated Pulse + Heartbeat Ripple + Mobile Tight UI
+// Banner.jsx
 import React from "react";
 import { motion } from "framer-motion";
-import { HeartPulse, Search } from "lucide-react";
+import { HeartPulse, Search, ArrowRight, ShieldCheck } from "lucide-react";
 import banner from "../../../assets/banner.jpeg";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 const bloodGroups = ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"];
 
 export default function Banner() {
   return (
-    <section className="relative overflow-hidden bg-[#fff1f2]">
-      {/* Light red gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-rose-100 via-red-50 to-pink-100" />
+    <section className="relative min-h-[85vh] flex items-center overflow-hidden bg-slate-50 pt-24 lg:pt-16">
+      {/* Sophisticated Light Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Soft radial glows */}
+        <div className="absolute top-[-10%] right-[-5%] w-[40%] h-[40%] bg-red-100/50 rounded-full blur-[100px]" />
+        <div className="absolute bottom-[5%] left-[-5%] w-[30%] h-[30%] bg-blue-50/60 rounded-full blur-[80px]" />
+        {/* Subtle geometric grid */}
+        <div
+          className="absolute inset-0 opacity-[0.4] [mask-image:linear-gradient(to_bottom,white,transparent)]"
+          style={{
+            backgroundImage: "radial-gradient(#e2e8f0 1px, transparent 1px)",
+            backgroundSize: "32px 32px",
+          }}
+        />
+      </div>
 
-      {/* Ambient glow */}
-      <div className="absolute -top-28 -left-28 w-[380px] h-[380px] bg-rose-300/40 rounded-full blur-[120px]" />
-      <div className="absolute -bottom-28 -right-28 w-[380px] h-[380px] bg-red-200/40 rounded-full blur-[120px]" />
-
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* LEFT CONTENT */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            className="text-slate-900"
+            initial={{ opacity: 0, x: -40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="z-10 text-center lg:text-left"
           >
-            <span className="inline-flex items-center gap-2 mb-3 px-3 py-1 text-[11px] font-semibold rounded-full bg-white/70 backdrop-blur border border-rose-200">
-              🩸 Save Lives Together
-            </span>
-
-            <h1 className="text-2xl sm:text-3xl md:text-4xl xl:text-5xl font-extrabold leading-tight">
-              Be Someone&apos;s{" "}
-              <span className="relative text-primary">
-                Pulse
-                <motion.span
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: [0, 1, 0.85, 1] }}
-                  transition={{
-                    duration: 1.8,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                  className="origin-left absolute -bottom-1 left-0 w-full h-1 bg-rose-300/80 rounded-full"
-                />
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full bg-white border border-slate-200 shadow-sm"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-600"></span>
               </span>
-              <br className="hidden sm:block" /> of Life
+              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">
+                Emergency Network
+              </span>
+            </motion.div>
+
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-slate-900 leading-[1.1] mb-6">
+              Be the Reason <br />
+              <span className="text-red-600">A Heart Keeps</span> <br />
+              Beating.
             </h1>
 
-            <p className="mt-3 sm:mt-4 text-sm sm:text-base md:text-lg text-slate-700 max-w-xl">
-              A trusted platform connecting blood donors and patients. Donate
-              blood or instantly find verified donors near you.
+            <p className="text-slate-600 text-lg md:text-xl max-w-xl mb-10 leading-relaxed mx-auto lg:mx-0">
+              PULSE connects you with verified blood donors in real-time. A
+              simple act of kindness can gift someone a lifetime.
             </p>
 
-            <div className="mt-5 sm:mt-6 flex flex-col sm:flex-row gap-3">
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-12">
               <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
               >
                 <Link
                   to="/auth/register"
-                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-rose-500 to-red-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg hover:shadow-rose-500/40 transition"
+                  className="flex items-center gap-3 px-8 py-4 bg-slate-900 text-white font-bold rounded-2xl shadow-xl shadow-slate-900/10 hover:bg-red-600 transition-all group"
                 >
-                  <HeartPulse className="w-4 h-4" />
+                  <HeartPulse className="w-5 h-5 group-hover:scale-110 transition-transform" />
                   Join as Donor
                 </Link>
               </motion.div>
 
               <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
               >
                 <Link
                   to="/search-donors"
-                  className="inline-flex items-center justify-center gap-2 rounded-lg border border-rose-300 text-rose-700 px-5 py-2.5 text-sm font-semibold hover:bg-rose-100 transition"
+                  className="flex items-center gap-3 px-8 py-4 bg-white text-slate-900 border border-slate-200 font-bold rounded-2xl hover:border-red-200 hover:bg-red-50/30 transition-all group shadow-sm"
                 >
-                  <Search className="w-4 h-4" />
-                  Search Donor
+                  <Search className="w-5 h-5 text-red-600" />
+                  Find Donors
+                  <ArrowRight className="w-4 h-4 opacity-50 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </motion.div>
             </div>
+
+            {/* REFINED BLOOD GROUP SELECTOR */}
+            <div className="pt-8 border-t border-slate-200/60">
+              <div className="flex flex-wrap justify-center lg:justify-start gap-3">
+                {bloodGroups.map((group) => (
+                  <motion.div
+                    key={group}
+                    whileHover={{ y: -4 }}
+                    className="w-11 h-11 flex items-center justify-center rounded-xl bg-white border border-slate-200 text-sm font-bold text-slate-700 hover:border-red-500 hover:text-red-600 hover:shadow-lg hover:shadow-red-500/10 cursor-pointer transition-all"
+                  >
+                    {group}
+                  </motion.div>
+                ))}
+              </div>
+            </div>
           </motion.div>
 
-          {/* RIGHT IMAGE + HEARTBEAT RIPPLE */}
+          {/* RIGHT IMAGE SECTION */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.94 }}
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7, delay: 0.15 }}
+            transition={{ duration: 1 }}
             className="relative flex justify-center lg:justify-end"
           >
-            {/* Heartbeat ripple */}
-            <motion.div
-              animate={{ scale: [1, 1.15, 1], opacity: [0.35, 0.15, 0.35] }}
-              transition={{
-                duration: 2.8,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              className="absolute w-72 h-72 sm:w-80 sm:h-80 rounded-full bg-rose-400/30 blur-3xl"
-            />
+            {/* Visual Frame */}
+            <div className="relative p-3 bg-white rounded-[2.5rem] shadow-2xl shadow-slate-200 border border-slate-100">
+              <div className="overflow-hidden rounded-[2rem] relative">
+                <img
+                  src={banner}
+                  alt="Pulse Donation"
+                  className="w-full max-w-lg h-[450px] md:h-[550px] object-cover"
+                />
+                {/* Overlay gradient for depth */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 to-transparent" />
+              </div>
 
-            <img
-              src={banner}
-              alt="Blood Donation"
-              className="relative w-full max-w-md rounded-2xl shadow-xl object-cover border border-white/60"
-            />
+              {/* Floating Verified Badge */}
+              <motion.div
+                animate={{ y: [0, -12, 0] }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="absolute top-10 -left-10 bg-white p-4 rounded-2xl shadow-2xl border border-slate-50 hidden md:flex items-center gap-3"
+              >
+                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                  <ShieldCheck className="text-green-600 w-6 h-6" />
+                </div>
+                <div>
+                  <p className="text-slate-900 font-bold text-sm">
+                    100% Verified
+                  </p>
+                  <p className="text-slate-400 text-[10px] uppercase font-bold tracking-tight">
+                    Donor Profiles
+                  </p>
+                </div>
+              </motion.div>
+            </div>
           </motion.div>
-        </div>
-
-        {/* BLOOD GROUP BADGES */}
-        <div className="mt-8 sm:mt-10 flex flex-wrap justify-center gap-2 sm:gap-3">
-          {bloodGroups.map((group) => (
-            <span
-              key={group}
-              className="px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold
-                bg-white/70 backdrop-blur-md border border-rose-200
-                text-rose-600 shadow-sm transition
-                hover:bg-rose-500 hover:text-white hover:shadow-rose-500/40"
-            >
-              {group}
-            </span>
-          ))}
         </div>
       </div>
     </section>
