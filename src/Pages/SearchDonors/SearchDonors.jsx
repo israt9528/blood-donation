@@ -54,7 +54,7 @@ const SearchDonors = () => {
   };
 
   return (
-    <div className="min-h-screen bg-red-50 p-4 md:p-10">
+    <div className="min-h-screen bg-red-50 p-4 md:p-10 my-26 mx-20 rounded-2xl">
       {/* Page Title */}
       <header className="text-center mb-10">
         <h1 className="text-3xl md:text-5xl font-bold text-red-700">
