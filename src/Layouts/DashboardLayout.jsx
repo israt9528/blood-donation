@@ -55,9 +55,7 @@ const DashboardLayout = () => {
             {/* Sidebar content here */}
             <ul className="menu w-full grow">
               {/* List item */}
-              <li>
-                <Logo></Logo>
-              </li>
+
               <li>
                 <NavLink
                   to="/dashboard"
