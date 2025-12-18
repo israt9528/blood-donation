@@ -9,24 +9,26 @@ import {
   Tooltip,
   ResponsiveContainer,
   CartesianGrid,
+  AreaChart,
+  Area,
 } from "recharts";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import useAuth from "../../../Hooks/useAuth";
 
 /* Skeleton */
 const Skeleton = ({ className }) => (
-  <div className={`animate-pulse rounded-lg bg-gray-300/60 ${className}`} />
+  <div className={`animate-pulse rounded-lg bg-slate-200 ${className}`} />
 );
 
 /* Card animation */
 const cardVariants = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 20 },
   visible: (i) => ({
     opacity: 1,
     y: 0,
     transition: {
-      delay: i * 0.15,
-      duration: 0.6,
+      delay: i * 0.1,
+      duration: 0.5,
       ease: "easeOut",
     },
   }),
@@ -65,7 +67,7 @@ const AdminHomePage = () => {
 
   const totalFund = funds.reduce((sum, f) => sum + Number(f.amount), 0);
 
-  /* Dummy chart aggregation (replace later if backend provides analytics) */
+  /* Dummy chart aggregation */
   const donationStats = [
     { name: "Mon", daily: 5, weekly: 22, monthly: 90 },
     { name: "Tue", daily: 8, weekly: 30, monthly: 120 },
@@ -82,56 +84,64 @@ const AdminHomePage = () => {
       value: donors.length,
       loading: donorsLoading,
       icon: <FaUsers />,
-      gradient: "from-red-500 to-rose-500",
+      gradient: "from-slate-800 to-slate-900",
+      accent: "text-slate-600",
     },
     {
       title: "Total Funding",
-      value: `৳ ${totalFund.toLocaleString()}`,
+      value: `$${totalFund.toLocaleString()}`,
       loading: fundingLoading,
       icon: <FaHandHoldingHeart />,
-      gradient: "from-emerald-500 to-teal-500",
+      gradient: "from-red-600 to-rose-700",
+      accent: "text-red-600",
     },
     {
       title: "Blood Requests",
       value: requests.length,
       loading: requestsLoading,
       icon: <FaTint />,
-      gradient: "from-red-600 to-red-400",
+      gradient: "from-red-500 to-orange-500",
+      accent: "text-orange-600",
     },
   ];
 
   return (
-    <div className="min-h-screen bg-base-200 px-4 py-6 md:px-8">
-      {/* Welcome */}
+    <div className="p-4 md:p-8 space-y-8 bg-slate-50/50 min-h-full">
+      {/* Welcome Hero Section */}
       <motion.div
-        initial={{ opacity: 0, y: -30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="relative mb-12 overflow-hidden rounded-3xl
-  bg-linear-to-br from-red-600 via-rose-500 to-orange-500
-  p-6 text-white shadow-2xl md:p-10"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+        className="relative overflow-hidden bg-gradient-to-br from-red-600 via-rose-700 to-slate-900 rounded-[2.5rem] p-8 md:p-12 text-white shadow-2xl shadow-red-200/50 group"
       >
-        {/* Glass overlay */}
-        <div className="absolute inset-0 bg-white/10 backdrop-blur-xl" />
+        {/* Animated Background Elements */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -mr-20 -mt-20 blur-3xl" />
+        <div className="absolute -bottom-24 -left-24 w-80 h-80 bg-red-400/20 rounded-full blur-3xl" />
 
-        {/* Decorative glow */}
-        <div className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-white/20 blur-3xl" />
-        <div className="absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-black/10 blur-3xl" />
-
-        <div className="relative z-10">
-          <h1 className="text-2xl font-bold md:text-4xl">
-            Welcome back, {user?.displayName} 👋
+        <div className="relative z-10 space-y-4">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase tracking-[0.2em]">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+            </span>
+            System Overview
+          </div>
+          <h1 className="text-3xl md:text-5xl font-black tracking-tighter leading-none">
+            Welcome back, <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-red-100 to-red-200">
+              {user?.displayName?.split(" ")[0] || "Admin"}
+            </span>
           </h1>
-          <p className="mt-4 max-w-2xl text-sm opacity-95 md:text-base leading-relaxed">
-            Here’s a quick overview of today’s activity. Manage donors, monitor
-            funding, and respond to blood donation requests — all from one
-            powerful dashboard.
+          <p className="text-red-50/80 max-w-xl font-medium text-sm md:text-base leading-relaxed">
+            Your management tools are ready. Monitor real-time donor growth,
+            funding accumulation, and urgent blood request status.
           </p>
         </div>
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
       </motion.div>
 
-      {/* Stat Cards */}
-      <div className="mb-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {/* Stat Cards Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {stats.map((stat, index) => (
           <motion.div
             key={stat.title}
@@ -139,75 +149,132 @@ const AdminHomePage = () => {
             variants={cardVariants}
             initial="hidden"
             animate="visible"
-            whileHover={{ y: -6, scale: 1.03 }}
-            className="relative overflow-hidden rounded-2xl
-            bg-white/80 backdrop-blur-xl p-6 shadow-lg"
+            whileHover={{ y: -5 }}
+            className="bg-white rounded-[2rem] p-8 border border-slate-100 shadow-xl shadow-slate-200/50 relative overflow-hidden group"
           >
-            <div
-              className={`absolute -inset-1 -z-10 bg-linear-to-br ${stat.gradient} opacity-15 blur-2xl`}
-            />
-
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-semibold text-gray-500">
+            <div className="flex justify-between items-start relative z-10">
+              <div className="space-y-2">
+                <p className="text-xs font-black text-slate-400 uppercase tracking-widest">
                   {stat.title}
                 </p>
-
                 {stat.loading ? (
-                  <Skeleton className="mt-3 h-8 w-24" />
+                  <Skeleton className="h-10 w-24" />
                 ) : (
-                  <h2 className="mt-2 text-3xl font-bold text-gray-800">
+                  <h2 className="text-4xl font-black text-slate-900 tracking-tighter">
                     {stat.value}
                   </h2>
                 )}
               </div>
-
               <div
-                className={`flex h-14 w-14 items-center justify-center rounded-xl
-                bg-linear-to-br ${stat.gradient} text-white text-2xl shadow-lg`}
+                className={`p-4 rounded-2xl bg-gradient-to-br ${stat.gradient} text-white shadow-lg group-hover:rotate-12 transition-transform duration-300`}
               >
-                {stat.icon}
+                <span className="text-2xl">{stat.icon}</span>
               </div>
             </div>
+            {/* Subtle decorative circle */}
+            <div
+              className={`absolute -bottom-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-br ${stat.gradient} opacity-[0.03]`}
+            />
           </motion.div>
         ))}
       </div>
 
-      {/* Chart Section */}
+      {/* Analytics Chart Section */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="rounded-3xl bg-white/80 backdrop-blur-xl p-6 shadow-xl"
+        transition={{ delay: 0.4 }}
+        className="bg-white rounded-[2.5rem] p-6 md:p-10 border border-slate-100 shadow-xl shadow-slate-200/50"
       >
-        <h2 className="mb-6 text-xl font-bold text-gray-800">
-          Donation Requests Overview
-        </h2>
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4">
+          <div>
+            <h2 className="text-2xl font-black text-slate-900 tracking-tight">
+              Donation Performance
+            </h2>
+            <p className="text-slate-400 text-sm font-medium italic">
+              Visualizing request trends across Daily, Weekly, and Monthly
+              cycles
+            </p>
+          </div>
+          <div className="flex items-center gap-4 text-xs font-bold uppercase tracking-widest">
+            <span className="flex items-center gap-1.5 text-red-500">
+              <span className="w-2 h-2 rounded-full bg-red-500"></span> Daily
+            </span>
+            <span className="flex items-center gap-1.5 text-orange-500">
+              <span className="w-2 h-2 rounded-full bg-orange-500"></span>{" "}
+              Weekly
+            </span>
+            <span className="flex items-center gap-1.5 text-emerald-500">
+              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>{" "}
+              Monthly
+            </span>
+          </div>
+        </div>
 
-        <div className="h-[320px]">
+        <div className="h-[350px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={donationStats}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
+            <LineChart
+              data={donationStats}
+              margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
+            >
+              <defs>
+                <filter id="shadow" height="200%">
+                  <feDropShadow
+                    dx="0"
+                    dy="5"
+                    stdDeviation="3"
+                    floodOpacity="0.1"
+                  />
+                </filter>
+              </defs>
+              <CartesianGrid
+                strokeDasharray="3 3"
+                vertical={false}
+                stroke="#f1f5f9"
+              />
+              <XAxis
+                dataKey="name"
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: "#94a3b8", fontSize: 12, fontWeight: 700 }}
+                dy={10}
+              />
+              <YAxis
+                axisLine={false}
+                tickLine={false}
+                tick={{ fill: "#94a3b8", fontSize: 12, fontWeight: 700 }}
+              />
+              <Tooltip
+                contentStyle={{
+                  borderRadius: "1.5rem",
+                  border: "none",
+                  boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.1)",
+                  fontWeight: "800",
+                }}
+              />
               <Line
                 type="monotone"
                 dataKey="daily"
                 stroke="#ef4444"
-                strokeWidth={3}
+                strokeWidth={4}
+                dot={{ fill: "#ef4444", strokeWidth: 2, r: 4, stroke: "#fff" }}
+                activeDot={{ r: 8, filter: "url(#shadow)" }}
               />
               <Line
                 type="monotone"
                 dataKey="weekly"
                 stroke="#f97316"
-                strokeWidth={3}
+                strokeWidth={4}
+                dot={{ fill: "#f97316", strokeWidth: 2, r: 4, stroke: "#fff" }}
+                activeDot={{ r: 8 }}
               />
               <Line
                 type="monotone"
                 dataKey="monthly"
-                stroke="#22c55e"
-                strokeWidth={3}
+                stroke="#10b981"
+                strokeWidth={4}
+                dot={{ fill: "#10b981", strokeWidth: 2, r: 4, stroke: "#fff" }}
+                activeDot={{ r: 8 }}
               />
             </LineChart>
           </ResponsiveContainer>
