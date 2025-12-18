@@ -168,6 +168,25 @@ const DashboardLayout = () => {
                 </>
               )}
 
+              {role === "volunteer" && (
+                <>
+                  {isExpanded && (
+                    <div className="pt-6 pb-2 px-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                      Admin
+                    </div>
+                  )}
+
+                  <SidebarItem
+                    to="/dashboard/all-blood-donation-request/volunteer"
+                    icon={<BiSolidDonateBlood size={22} />}
+                    label="All Requests"
+                    expanded={isExpanded}
+                    activeLink={activeLink}
+                    normalLink={normalLink}
+                  />
+                </>
+              )}
+
               {role === "donor" && (
                 <>
                   {isExpanded && (
