@@ -1,40 +1,62 @@
 # Project Name  
-PULSE
+##PULSE
 
 ---
 
-## Table of Contents
 
-- [About the Project](#about-the-project)
-- [Project Overview](#project-overview)
-- [Key Features](#key-features)
-- [Tech Stack](#tech-stack)
-- [Dependencies](#dependencies)
-- [Installation️ & Setup](#installation--setup)
-- [Folder Structure](#folder-structure)
-- [Contributions](#contributions)
-- [How to Contribute](#how-to-contribute)
-- [License](#license)
-- [Contact](#contact)
-
----
 
 ## About the Project 
-A brief description of the project, its purpose, and what problem it solves.
+Pulse is a full-stack Blood Donation Management Platform designed to connect blood donors, recipients, volunteers, and administrators through a secure, efficient, and user-friendly system. The platform aims to reduce the gap between people in urgent need of blood and available donors across Bangladesh, enabling faster response, better coordination, and transparent management of blood donation activities.
+
+The application supports role-based access control with three distinct user roles — Admin, Donor, and Volunteer — each having clearly defined permissions and responsibilities. Users can register, manage their profiles, create or respond to blood donation requests, search for donors by location and blood group, and track donation statuses in real time.
+
+Pulse is built using the MERN stack (MongoDB, Express.js, React, Node.js) with modern best practices such as JWT authentication, protected routes, environment-based security, and responsive UI design. The platform also integrates Firebase authentication, ImageBB for avatar uploads, and Stripe payment gateway for funding support.
+
+Special focus has been given to clean UI/UX, accessibility, and performance. The dashboard uses a sidebar-based layout, supports pagination, filtering, charts, and ensures that users remain logged in even after refreshing private routes. Admins have full control over users, roles, donation requests, and funding data, while volunteers assist by managing donation request statuses.
+
+Pulse is not just a project—it is a socially impactful solution aimed at saving lives through technology.
+
 
 ---
 
 ## Project Overview  
-Summarize the project objectives, key metrics, and any relevant statistics.  
-You can also include a diagram or screenshot.
+Pulse is a modern blood donation web application that enables users to request blood, donate blood, search donors, manage requests, and support organizations through funding, all within a secure and responsive platform built using the MERN stack.
+<img src="https://i.ibb.co.com/wN8g97c1/3a4b9d5c-0cdb-40ed-97d9-ec06bb80b45f.jpg"/>
+<img src="https://i.ibb.co.com/G37P6kCC/303087e2-bba7-4d26-a323-6e1884551b51.jpg"/>
+<img src="https://i.ibb.co.com/YT79vK7Q/5bdeb4d7-eb80-4cf9-8d3a-cb35dbf6d96a.jpg"/>
 
 ---
 
 ## Key Features  
-- Feature 1 — short explanation  
-- Feature 2 — short explanation  
-- Feature 3 — short explanation  
-- Authentication / Dashboard / API Integration (optional examples)
+-Secure Authentication & Authorization
+Implements JWT-based authentication with protected routes and role-based access to ensure data privacy and secure user sessions.
+
+-User Role Management
+Supports Admin, Donor, and Volunteer roles with controlled permissions, allowing admins to manage users, roles, and access levels.
+
+-Blood Donation Request System
+Enables users to create, update, track, and manage blood donation requests with real-time status updates.
+
+-Dashboard with Analytics
+Role-specific dashboards displaying statistics, charts, and insights for quick monitoring of users, requests, and funding data.
+
+-Advanced Donor Search
+Allows users to find donors efficiently by filtering blood group, district, and upazila.
+
+-Profile Management
+Users can view and update their profile information, including avatar, location, and blood group, with secure data handling.
+
+-Funding & Stripe Integration
+Integrates Stripe payment gateway to securely collect and track funding contributions from users.
+
+-Fully Responsive Design
+Optimized for mobile, tablet, and desktop devices with consistent layout, spacing, and modern UI principles.
+
+-Production-Ready Security
+Uses environment variables for sensitive credentials and ensures error-free deployment with CORS-safe backend configuration.
+
+-Additional Enhancements
+Includes pagination, filtering, confirmation modals, animations, and improved UX for a smooth user experience.
 
 ---
 
