@@ -14,6 +14,8 @@ import {
   FiMapPin,
   FiUser,
   FiDroplet,
+  FiChevronLeft,
+  FiChevronRight,
 } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import Loading from "../../../Components/Loading/Loading";
@@ -22,6 +24,10 @@ const MyDonationRequests = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
   const [statusFilter, setStatusFilter] = useState("all");
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   const {
     data: requests = [],
@@ -39,6 +45,15 @@ const MyDonationRequests = () => {
     statusFilter === "all"
       ? requests
       : requests.filter((r) => r.donationStatus === statusFilter);
+
+  // Pagination Logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredRequests.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
+  const totalPages = Math.ceil(filteredRequests.length / itemsPerPage);
 
   const handleRequestDelete = (id) => {
     Swal.fire({
@@ -108,7 +123,10 @@ const MyDonationRequests = () => {
             <select
               className="select select-ghost focus:bg-transparent w-full md:w-48 font-bold text-slate-700"
               value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
+              onChange={(e) => {
+                setStatusFilter(e.target.value);
+                setCurrentPage(1); // Reset to page 1 on filter change
+              }}
             >
               <option value="all">All Status</option>
               <option value="pending">⏳ Pending</option>
@@ -148,7 +166,7 @@ const MyDonationRequests = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {filteredRequests.map((r) => (
+              {currentItems.map((r) => (
                 <tr
                   key={r._id}
                   className="hover:bg-slate-50/80 transition-colors group"
@@ -279,7 +297,7 @@ const MyDonationRequests = () => {
         {/* Mobile/Tablet Card View */}
         <div className="lg:hidden grid grid-cols-1 md:grid-cols-2 gap-4">
           <AnimatePresence>
-            {filteredRequests.map((r) => (
+            {currentItems.map((r) => (
               <motion.div
                 layout
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -380,6 +398,45 @@ const MyDonationRequests = () => {
             ))}
           </AnimatePresence>
         </div>
+
+        {/* Pagination Controls */}
+        {filteredRequests.length > itemsPerPage && (
+          <div className="flex items-center justify-center gap-2 mt-10">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+              className="p-2 rounded-xl bg-white border border-slate-200 text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-900 hover:text-white transition-all shadow-sm"
+            >
+              <FiChevronLeft size={20} />
+            </button>
+
+            <div className="flex gap-1">
+              {[...Array(totalPages)].map((_, index) => (
+                <button
+                  key={index + 1}
+                  onClick={() => setCurrentPage(index + 1)}
+                  className={`w-10 h-10 rounded-xl font-bold text-sm transition-all ${
+                    currentPage === index + 1
+                      ? "bg-slate-900 text-white shadow-lg"
+                      : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              ))}
+            </div>
+
+            <button
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+              disabled={currentPage === totalPages}
+              className="p-2 rounded-xl bg-white border border-slate-200 text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-900 hover:text-white transition-all shadow-sm"
+            >
+              <FiChevronRight size={20} />
+            </button>
+          </div>
+        )}
 
         {/* Empty State */}
         {filteredRequests.length === 0 && (
