@@ -3,28 +3,28 @@ import { useForm } from "react-hook-form";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import useAuth from "../../Hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
+import Loading from "../../Components/Loading/Loading";
+import { FaDollarSign, FaHistory, FaPlusCircle } from "react-icons/fa"; // Optional: icons make it pop
 
 const Funding = () => {
   const fundModalRef = useRef();
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
 
-  const { data: funds = [] } = useQuery({
+  const { data: funds = [], isLoading } = useQuery({
     queryKey: ["funds"],
     queryFn: async () => {
       const res = await axiosSecure("/funds");
       return res.data;
     },
   });
-  console.log(funds);
 
   const openFundModal = () => {
     fundModalRef.current.showModal();
   };
 
   const handleGiveFund = async (data) => {
-    console.log(data);
     const fundInfo = {
       name: data.name,
       email: user.email,
@@ -32,70 +32,141 @@ const Funding = () => {
     };
     const res = await axiosSecure.post("/create-checkout-session", fundInfo);
 
-    console.log(res.data);
+    reset(); // Clear form after submission
     fundModalRef.current.close();
     window.location.href = res.data.url;
   };
 
-  return (
-    <div>
-      <button onClick={openFundModal} className="btn">
-        give fund
-      </button>
+  if (isLoading) return <Loading />;
 
-      <div className="overflow-x-auto">
-        <table className="table table-zebra">
-          {/* head */}
-          <thead>
-            <tr>
-              <th></th>
-              <th>Name</th>
-              <th>Amount</th>
-              <th>Funding Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {funds.map((f, i) => (
-              <tr key={i}>
-                <th>{i + 1}</th>
-                <td>{f.senderName}</td>
-                <td>{f.amount}</td>
-                <td>{new Date(f.giveAt).toLocaleDateString()}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-30">
+      {/* Header / Hero Section */}
+      <div className="bg-gradient-to-r from-primary to-secondary text-primary-content rounded-2xl p-8 mb-10 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+        <div>
+          <h1 className="text-4xl font-bold mb-2">Support Our Mission</h1>
+          <p className="opacity-90 max-w-md">
+            Your contributions help us grow and provide better services to the
+            community. View the history of our generous donors below.
+          </p>
+        </div>
+        <button
+          onClick={openFundModal}
+          className="btn btn-lg bg-white border-none shadow-lg hover:scale-105 transition-transform"
+        >
+          <FaPlusCircle className="mr-2" /> Give Fund Now
+        </button>
       </div>
 
+      {/* Main Content: Funding History */}
+      <div className="bg-base-100 shadow-sm border border-base-200 rounded-xl overflow-hidden">
+        <div className="p-6 border-b border-base-200 flex items-center gap-2">
+          <FaHistory className="text-primary" />
+          <h2 className="text-xl font-semibold">Funding History</h2>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="table table-zebra w-full">
+            {/* head */}
+            <thead className="bg-base-200">
+              <tr className="text-base uppercase tracking-wider">
+                <th>#</th>
+                <th>Donor Name</th>
+                <th>Amount</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {funds.length > 0 ? (
+                funds.map((f, i) => (
+                  <tr
+                    key={i}
+                    className="hover:bg-base-200/50 transition-colors"
+                  >
+                    <th className="font-medium text-base-content/50">
+                      {i + 1}
+                    </th>
+                    <td className="font-medium">{f.senderName}</td>
+                    <td>
+                      <span className="badge badge-success badge-outline font-bold">
+                        ${f.amount}
+                      </span>
+                    </td>
+                    <td className="text-base-content/70">
+                      {new Date(f.giveAt).toLocaleDateString(undefined, {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan="4"
+                    className="text-center py-10 text-base-content/50"
+                  >
+                    No contributions found yet. Be the first to donate!
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Modern Dialog Modal */}
       <dialog ref={fundModalRef} className="modal modal-bottom sm:modal-middle">
-        <div className="modal-box">
-          <h3 className="font-bold text-lg">Donor</h3>
-          <div className="overflow-x-auto p-5">
-            <form onSubmit={handleSubmit(handleGiveFund)} className="space-y-4">
+        <div className="modal-box p-0 overflow-hidden">
+          <div className="bg-primary p-6 text-primary-content">
+            <h3 className="font-bold text-2xl flex items-center gap-2">
+              <FaDollarSign /> Make a Contribution
+            </h3>
+            <p className="text-sm opacity-80 mt-1">
+              Enter your details and the amount you wish to fund.
+            </p>
+          </div>
+
+          <div className="p-8">
+            <form onSubmit={handleSubmit(handleGiveFund)} className="space-y-5">
               <div className="form-control">
-                <label className="label font-medium">Name</label>
+                <label className="label">
+                  <span className="label-text font-semibold">Full Name</span>
+                </label>
                 <input
                   type="text"
-                  {...register("name")}
-                  className="input input-bordered w-full"
-                />
-              </div>
-              <div className="form-control">
-                <label className="label font-medium">Amount ($)</label>
-                <input
-                  type="number"
-                  {...register("amount")}
-                  className="input input-bordered w-full"
+                  placeholder="John Doe"
+                  {...register("name", { required: true })}
+                  className="input input-bordered focus:input-primary w-full transition-all"
                 />
               </div>
 
-              <button className="btn">Confirm</button>
-            </form>
-          </div>
-          <div className="modal-action">
-            <form method="dialog">
-              {/* if there is a button in form, it will close the modal */}
-              <button className="btn">Close</button>
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text font-semibold">Amount ($)</span>
+                </label>
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-base-content/40">
+                    $
+                  </span>
+                  <input
+                    type="number"
+                    placeholder="0.00"
+                    {...register("amount", { required: true, min: 1 })}
+                    className="input input-bordered focus:input-primary w-full pl-8 transition-all"
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-3 mt-8">
+                <button type="submit" className="btn btn-primary flex-1">
+                  Proceed to Checkout
+                </button>
+                <form method="dialog" className="flex-1">
+                  <button className="btn btn-outline w-full">Cancel</button>
+                </form>
+              </div>
             </form>
           </div>
         </div>

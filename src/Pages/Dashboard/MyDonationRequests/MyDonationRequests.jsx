@@ -16,6 +16,7 @@ import {
   FiDroplet,
 } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
+import Loading from "../../../Components/Loading/Loading";
 
 const MyDonationRequests = () => {
   const { user } = useAuth();
@@ -85,11 +86,7 @@ const MyDonationRequests = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center min-h-[400px]">
-        <span className="loading loading-ring loading-lg text-red-600"></span>
-      </div>
-    );
+    return <Loading></Loading>;
   }
 
   return (

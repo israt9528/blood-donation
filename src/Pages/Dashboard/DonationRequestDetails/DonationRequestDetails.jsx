@@ -18,6 +18,7 @@ import { motion } from "framer-motion";
 import useAuth from "../../../Hooks/useAuth";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
+import Loading from "../../../Components/Loading/Loading";
 
 const DonationRequestDetails = () => {
   const requestModalRef = useRef();
@@ -76,12 +77,7 @@ const DonationRequestDetails = () => {
     });
   };
 
-  if (isLoading)
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
-        <span className="loading loading-ring loading-lg text-red-600"></span>
-      </div>
-    );
+  if (isLoading) return <Loading />;
 
   return (
     <div className="min-h-screen bg-slate-50 py-8 px-4 sm:px-6 lg:px-8">

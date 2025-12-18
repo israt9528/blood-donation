@@ -10,6 +10,7 @@ import {
   IoEyeSharp,
 } from "react-icons/io5";
 import { motion } from "framer-motion";
+import Loading from "../../Components/Loading/Loading";
 
 const DonationRequests = () => {
   const axiosSecure = useAxiosSecure();
@@ -25,15 +26,11 @@ const DonationRequests = () => {
   });
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center min-h-[400px]">
-        <span className="loading loading-ring loading-lg text-red-600"></span>
-      </div>
-    );
+    return <Loading />;
   }
 
   return (
-    <div className="p-4 sm:p-8 bg-slate-50 min-h-screen">
+    <div className="p-4 sm:p-8 bg-slate-50 min-h-screen my-20">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
