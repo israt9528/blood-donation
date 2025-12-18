@@ -10,7 +10,7 @@ const features = [
     description:
       "Quickly register and donate blood to save lives in your community.",
     image:
-      "https://images.unsplash.com/photo-1615461066841-6116ecaaba30?auto=format&fit=crop&q=80&w=500",
+      "https://i.ibb.co.com/qYMyJ350/Gemini-Generated-Image-bnnx8dbnnx8dbnnx.png",
   },
   {
     icon: <Users className="w-6 h-6 text-red-500" />,

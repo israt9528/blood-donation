@@ -24,8 +24,8 @@ export default function Footer() {
       title: "Quick Links",
       links: [
         { name: "About Us", path: "/about" },
-        { name: "Find Donors", path: "/donors" },
-        { name: "Request Blood", path: "/request" },
+        { name: "Search Donors", path: "/search-donors" },
+        { name: "Request Blood", path: "/donation-requests" },
         { name: "Success Stories", path: "/stories" },
         { name: "Contact Us", path: "/contact" },
       ],
@@ -128,7 +128,7 @@ export default function Footer() {
                     <li key={i}>
                       <Link
                         to={link.path}
-                        className="text-sm font-medium transition-color "
+                        className="text-sm font-medium transition-color hover:text-red-600 bg-transparent "
                       >
                         {link.name}
                       </Link>

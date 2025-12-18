@@ -2,7 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { HeartPulse, Search, ArrowRight, ShieldCheck } from "lucide-react";
-import banner from "../../../assets/banner.jpeg";
+// import banner from "../../../assets/banner.jpeg";
 import { Link } from "react-router-dom";
 
 const bloodGroups = ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"];
@@ -115,7 +115,7 @@ export default function Banner() {
             <div className="relative p-3 bg-white rounded-[2.5rem] shadow-2xl shadow-slate-200 border border-slate-100">
               <div className="overflow-hidden rounded-[2rem] relative">
                 <img
-                  src={banner}
+                  src="https://wockhardthospitals.com/wp-content/uploads/2020/01/shutterstock_264395594-1-768x768-1.webp"
                   alt="Pulse Donation"
                   className="w-full max-w-lg h-[450px] md:h-[550px] object-cover"
                 />
