@@ -1,9 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { FaUsers, FaHandHoldingHeart, FaTint } from "react-icons/fa";
 import {
-  LineChart,
-  Line,
+  FaUsers,
+  FaHandHoldingHeart,
+  FaTint,
+  FaArrowUp,
+  FaChartLine,
+} from "react-icons/fa";
+import {
+  HiOutlineShieldCheck,
+  HiOutlineTrendingUp,
+  HiOutlineLightningBolt,
+} from "react-icons/hi";
+import {
   XAxis,
   YAxis,
   Tooltip,
@@ -15,30 +24,16 @@ import {
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import useAuth from "../../../Hooks/useAuth";
 
-/* Skeleton */
+/* Skeleton Loader */
 const Skeleton = ({ className }) => (
-  <div className={`animate-pulse rounded-lg bg-slate-200 ${className}`} />
+  <div className={`animate-pulse rounded-2xl bg-slate-200/50 ${className}`} />
 );
-
-/* Card animation */
-const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: (i) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: i * 0.1,
-      duration: 0.5,
-      ease: "easeOut",
-    },
-  }),
-};
 
 const AdminHomePage = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
 
-  /* Requests */
+  /* Data Fetching */
   const { data: requests = [], isLoading: requestsLoading } = useQuery({
     queryKey: ["requests"],
     queryFn: async () => {
@@ -47,7 +42,6 @@ const AdminHomePage = () => {
     },
   });
 
-  /* Users */
   const { data: donors = [], isLoading: donorsLoading } = useQuery({
     queryKey: ["donors"],
     queryFn: async () => {
@@ -56,7 +50,6 @@ const AdminHomePage = () => {
     },
   });
 
-  /* Funds */
   const { data: funds = [], isLoading: fundingLoading } = useQuery({
     queryKey: ["funds"],
     queryFn: async () => {
@@ -67,7 +60,6 @@ const AdminHomePage = () => {
 
   const totalFund = funds.reduce((sum, f) => sum + Number(f.amount), 0);
 
-  /* Dummy chart aggregation */
   const donationStats = [
     { name: "Mon", daily: 5, weekly: 22, monthly: 90 },
     { name: "Tue", daily: 8, weekly: 30, monthly: 120 },
@@ -80,152 +72,164 @@ const AdminHomePage = () => {
 
   const stats = [
     {
-      title: "Total Users",
+      title: "Active Users",
       value: donors.length,
       loading: donorsLoading,
       icon: <FaUsers />,
-      gradient: "from-slate-800 to-slate-900",
-      accent: "text-slate-600",
+      color: "text-indigo-600",
+      bg: "bg-indigo-50",
+      trend: "Community Base",
     },
     {
       title: "Total Funding",
       value: `$${totalFund.toLocaleString()}`,
       loading: fundingLoading,
       icon: <FaHandHoldingHeart />,
-      gradient: "from-red-600 to-rose-700",
-      accent: "text-red-600",
+      color: "text-emerald-600",
+      bg: "bg-emerald-50",
+      trend: "Verified Assets",
     },
     {
       title: "Blood Requests",
       value: requests.length,
       loading: requestsLoading,
       icon: <FaTint />,
-      gradient: "from-red-500 to-orange-500",
-      accent: "text-orange-600",
+      color: "text-rose-600",
+      bg: "bg-rose-50",
+      trend: "Emergency Queue",
     },
   ];
 
   return (
-    <div className="p-4 md:p-8 space-y-8 bg-slate-50/50 min-h-full">
-      {/* Welcome Hero Section */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        className="relative overflow-hidden bg-gradient-to-br from-red-600 via-rose-700 to-slate-900 rounded-[2.5rem] p-8 md:p-12 text-white shadow-2xl shadow-red-200/50 group"
-      >
-        {/* Animated Background Elements */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -mr-20 -mt-20 blur-3xl" />
-        <div className="absolute -bottom-24 -left-24 w-80 h-80 bg-red-400/20 rounded-full blur-3xl" />
+    <div className="p-4 md:p-8 space-y-8 max-w-7xl mx-auto min-h-screen bg-slate-50/30">
+      {/* 1. Volunteer-Style Welcome Section (Administrative Version) */}
+      <section className="relative overflow-hidden rounded-[2.5rem] bg-slate-900 p-8 md:p-12 shadow-2xl">
+        {/* Abstract Blur Blobs */}
+        <div className="absolute -right-10 -top-10 h-64 w-64 rounded-full bg-red-600/10 blur-3xl" />
+        <div className="absolute -bottom-10 left-10 h-48 w-48 rounded-full bg-indigo-600/10 blur-3xl" />
 
-        <div className="relative z-10 space-y-4">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[10px] font-black uppercase tracking-[0.2em]">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
-            </span>
-            System Overview
-          </div>
-          <h1 className="text-3xl md:text-5xl font-black tracking-tighter leading-none">
-            Welcome back, <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-red-100 to-red-200">
-              {user?.displayName?.split(" ")[0] || "Admin"}
-            </span>
-          </h1>
-          <p className="text-red-50/80 max-w-xl font-medium text-sm md:text-base leading-relaxed">
-            Your management tools are ready. Monitor real-time donor growth,
-            funding accumulation, and urgent blood request status.
-          </p>
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="flex items-center gap-2 text-red-400 mb-4">
+              <HiOutlineShieldCheck size={20} className="animate-pulse" />
+              <span className="text-[10px] font-black uppercase tracking-[0.3em]">
+                Administrative Portal
+              </span>
+            </div>
+            <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
+              Welcome back, <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-rose-200">
+                {user?.displayName?.split(" ")[0] || "Admin"}
+              </span>{" "}
+              👋
+            </h1>
+            <p className="mt-4 max-w-lg text-slate-400 font-medium leading-relaxed italic">
+              "Efficiency in management saves lives. Your oversight ensures the
+              community's safety."
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="hidden lg:block bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-3xl"
+          >
+            <div className="flex items-center gap-4 text-white">
+              <div className="h-12 w-12 rounded-2xl bg-indigo-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                <HiOutlineLightningBolt size={24} />
+              </div>
+              <div>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                  Global Status
+                </p>
+                <p className="text-xl font-black uppercase tracking-tight">
+                  Active Oversight
+                </p>
+              </div>
+            </div>
+          </motion.div>
         </div>
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
-      </motion.div>
+      </section>
 
-      {/* Stat Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* 2. Statistics Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {stats.map((stat, index) => (
           <motion.div
             key={stat.title}
-            custom={index}
-            variants={cardVariants}
-            initial="hidden"
-            animate="visible"
-            whileHover={{ y: -5 }}
-            className="bg-white rounded-[2rem] p-8 border border-slate-100 shadow-xl shadow-slate-200/50 relative overflow-hidden group"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+            whileHover={{ y: -8 }}
+            className="group relative overflow-hidden rounded-[2rem] bg-white border border-slate-100 p-8 shadow-sm hover:shadow-xl transition-all duration-300"
           >
-            <div className="flex justify-between items-start relative z-10">
-              <div className="space-y-2">
-                <p className="text-xs font-black text-slate-400 uppercase tracking-widest">
-                  {stat.title}
-                </p>
-                {stat.loading ? (
-                  <Skeleton className="h-10 w-24" />
-                ) : (
-                  <h2 className="text-4xl font-black text-slate-900 tracking-tighter">
-                    {stat.value}
-                  </h2>
-                )}
-              </div>
-              <div
-                className={`p-4 rounded-2xl bg-gradient-to-br ${stat.gradient} text-white shadow-lg group-hover:rotate-12 transition-transform duration-300`}
-              >
+            <div className="flex justify-between items-start mb-6">
+              <div className={`p-4 rounded-2xl ${stat.bg} ${stat.color}`}>
                 <span className="text-2xl">{stat.icon}</span>
               </div>
+              <div className="flex items-center gap-1 text-emerald-500 text-[10px] font-black uppercase bg-emerald-50 px-2 py-1 rounded-lg">
+                <FaArrowUp size={8} /> LIVE
+              </div>
             </div>
-            {/* Subtle decorative circle */}
-            <div
-              className={`absolute -bottom-6 -right-6 w-24 h-24 rounded-full bg-gradient-to-br ${stat.gradient} opacity-[0.03]`}
-            />
+            <div>
+              <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">
+                {stat.title}
+              </p>
+              {stat.loading ? (
+                <Skeleton className="h-10 w-24" />
+              ) : (
+                <h2 className="text-4xl font-black text-slate-900 tracking-tighter">
+                  {stat.value}
+                </h2>
+              )}
+              <p className="mt-4 text-[11px] font-bold text-slate-400">
+                {stat.trend}
+              </p>
+            </div>
           </motion.div>
         ))}
       </div>
 
-      {/* Analytics Chart Section */}
+      {/* 3. Analytics Chart Section */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-        className="bg-white rounded-[2.5rem] p-6 md:p-10 border border-slate-100 shadow-xl shadow-slate-200/50"
+        className="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-sm"
       >
-        <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-4">
           <div>
             <h2 className="text-2xl font-black text-slate-900 tracking-tight">
-              Donation Performance
+              Platform Performance
             </h2>
             <p className="text-slate-400 text-sm font-medium italic">
-              Visualizing request trends across Daily, Weekly, and Monthly
-              cycles
+              Data trends across core modules
             </p>
           </div>
-          <div className="flex items-center gap-4 text-xs font-bold uppercase tracking-widest">
-            <span className="flex items-center gap-1.5 text-red-500">
-              <span className="w-2 h-2 rounded-full bg-red-500"></span> Daily
-            </span>
-            <span className="flex items-center gap-1.5 text-orange-500">
-              <span className="w-2 h-2 rounded-full bg-orange-500"></span>{" "}
-              Weekly
-            </span>
-            <span className="flex items-center gap-1.5 text-emerald-500">
-              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>{" "}
+          <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-[0.1em]">
+            <div className="flex items-center gap-2 text-red-500">
+              <span className="w-2.5 h-2.5 rounded-full bg-red-500" /> Daily
+            </div>
+            <div className="flex items-center gap-2 text-orange-400">
+              <span className="w-2.5 h-2.5 rounded-full bg-orange-400" /> Weekly
+            </div>
+            <div className="flex items-center gap-2 text-emerald-500">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />{" "}
               Monthly
-            </span>
+            </div>
           </div>
         </div>
 
-        <div className="h-[350px] w-full">
+        <div className="h-[400px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              data={donationStats}
-              margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
-            >
+            <AreaChart data={donationStats}>
               <defs>
-                <filter id="shadow" height="200%">
-                  <feDropShadow
-                    dx="0"
-                    dy="5"
-                    stdDeviation="3"
-                    floodOpacity="0.1"
-                  />
-                </filter>
+                <linearGradient id="colorDaily" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#ef4444" stopOpacity={0.1} />
+                  <stop offset="95%" stopColor="#ef4444" stopOpacity={0} />
+                </linearGradient>
               </defs>
               <CartesianGrid
                 strokeDasharray="3 3"
@@ -237,7 +241,7 @@ const AdminHomePage = () => {
                 axisLine={false}
                 tickLine={false}
                 tick={{ fill: "#94a3b8", fontSize: 12, fontWeight: 700 }}
-                dy={10}
+                dy={15}
               />
               <YAxis
                 axisLine={false}
@@ -248,35 +252,33 @@ const AdminHomePage = () => {
                 contentStyle={{
                   borderRadius: "1.5rem",
                   border: "none",
-                  boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.1)",
-                  fontWeight: "800",
+                  boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.1)",
+                  padding: "1rem",
                 }}
               />
-              <Line
+              <Area
                 type="monotone"
                 dataKey="daily"
                 stroke="#ef4444"
                 strokeWidth={4}
-                dot={{ fill: "#ef4444", strokeWidth: 2, r: 4, stroke: "#fff" }}
-                activeDot={{ r: 8, filter: "url(#shadow)" }}
+                fillOpacity={1}
+                fill="url(#colorDaily)"
               />
-              <Line
+              <Area
                 type="monotone"
                 dataKey="weekly"
-                stroke="#f97316"
+                stroke="#fb923c"
                 strokeWidth={4}
-                dot={{ fill: "#f97316", strokeWidth: 2, r: 4, stroke: "#fff" }}
-                activeDot={{ r: 8 }}
+                fill="transparent"
               />
-              <Line
+              <Area
                 type="monotone"
                 dataKey="monthly"
                 stroke="#10b981"
                 strokeWidth={4}
-                dot={{ fill: "#10b981", strokeWidth: 2, r: 4, stroke: "#fff" }}
-                activeDot={{ r: 8 }}
+                fill="transparent"
               />
-            </LineChart>
+            </AreaChart>
           </ResponsiveContainer>
         </div>
       </motion.div>

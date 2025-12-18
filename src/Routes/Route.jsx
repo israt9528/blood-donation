@@ -22,11 +22,13 @@ import SearchDonors from "../Pages/SearchDonors/SearchDonors";
 import Funding from "../Pages/Funding/Funding";
 import FundSuccessful from "../Pages/Funding/FundSuccessful";
 import FundCancelled from "../Pages/Funding/FundCancelled";
+import ErrorPage from "../Pages/ErrorPage/ErrorPage";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     Component: MainLayout,
+    errorElement: <ErrorPage></ErrorPage>,
     children: [
       {
         path: "/",

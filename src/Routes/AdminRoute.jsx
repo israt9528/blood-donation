@@ -1,16 +1,16 @@
 import React from "react";
 import useRole from "../Hooks/useRole";
+import Loading from "../Components/Loading/Loading";
+import Forbidden from "../Components/Forbidden/Forbidden";
 
 const AdminRoute = ({ children }) => {
   const { role, isLoading } = useRole();
   if (isLoading) {
-    return <span className="loading loading-spinner loading-xl"></span>;
+    return <Loading></Loading>;
   }
 
   if (role !== "admin") {
-    return (
-      <div className="text-5xl text-red-700 font-bold">Forbidden Access</div>
-    );
+    return <Forbidden></Forbidden>;
   }
   return children;
 };

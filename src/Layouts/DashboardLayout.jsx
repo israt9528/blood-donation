@@ -30,11 +30,10 @@ const DashboardLayout = () => {
         <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
 
         <div className="drawer-content flex flex-col min-h-screen">
-          {/* --- Main Content Header (Top Div Section) --- */}
+          {/* --- Main Content Header --- */}
           <header className="bg-white border-b border-slate-200 px-4 py-4 lg:px-8 sticky top-0 z-30">
             <div className="max-w-7xl mx-auto flex items-center justify-between">
               <div className="flex items-center gap-4">
-                {/* Mobile Toggle */}
                 <label
                   htmlFor="my-drawer-4"
                   className="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg"
@@ -46,7 +45,6 @@ const DashboardLayout = () => {
                 </h2>
               </div>
 
-              {/* Top Search & Actions */}
               <div className="flex items-center gap-3 md:gap-6">
                 <div className="hidden md:flex items-center bg-slate-100 px-3 py-2 rounded-xl border border-slate-200 group focus-within:bg-white focus-within:ring-2 focus-within:ring-red-100 transition-all">
                   <HiSearch className="text-slate-400" />
@@ -123,7 +121,7 @@ const DashboardLayout = () => {
             </div>
 
             {/* Navigation Menu */}
-            <ul className="menu w-full px-3 space-y-2 font-bold text-sm">
+            <ul className="menu w-full px-3 space-y-2 font-bold text-sm overflow-visible">
               <SidebarItem
                 to="/dashboard"
                 icon={<FaHome size={20} />}
@@ -172,7 +170,7 @@ const DashboardLayout = () => {
                 <>
                   {isExpanded && (
                     <div className="pt-6 pb-2 px-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                      Admin
+                      volunteer
                     </div>
                   )}
 
@@ -215,7 +213,7 @@ const DashboardLayout = () => {
 
               <div className="my-4 border-t border-slate-100"></div>
 
-              <li>
+              <li className="relative">
                 <button
                   className={`${normalLink} flex items-center h-12 rounded-xl px-0 w-full group relative`}
                 >
@@ -225,7 +223,7 @@ const DashboardLayout = () => {
                   {isExpanded ? (
                     <span>Settings</span>
                   ) : (
-                    <span className="absolute left-16 bg-slate-800 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50 pointer-events-none">
+                    <span className="absolute left-[70px] bg-slate-800 text-white text-[10px] px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-200 whitespace-nowrap z-[100] pointer-events-none shadow-2xl border border-slate-700 font-bold tracking-wider">
                       Settings
                     </span>
                   )}
@@ -262,7 +260,6 @@ const DashboardLayout = () => {
   );
 };
 
-// Helper component for cleaner NavLinks with Tooltips
 const SidebarItem = ({
   to,
   icon,
@@ -272,7 +269,7 @@ const SidebarItem = ({
   normalLink,
   end = false,
 }) => (
-  <li>
+  <li className="relative">
     <NavLink
       to={to}
       end={end}
@@ -288,7 +285,7 @@ const SidebarItem = ({
       {expanded ? (
         <span className="whitespace-nowrap">{label}</span>
       ) : (
-        <span className="absolute left-16 bg-slate-800 text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50 pointer-events-none shadow-xl">
+        <span className="absolute left-[70px] bg-slate-800 text-white text-[10px] px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-200 whitespace-nowrap z-[100] pointer-events-none shadow-2xl border border-slate-700 font-bold tracking-wider">
           {label}
         </span>
       )}

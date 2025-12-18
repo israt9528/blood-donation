@@ -3,12 +3,13 @@ import useRole from "../../../Hooks/useRole";
 import AdminHomePage from "./AdminHomePage";
 import VolunteerHomePage from "./VolunteerHomePage";
 import DonorHomePage from "./DonorHomePage";
+import Loading from "../../../Components/Loading/Loading";
 
 const HomePage = () => {
   const { role, isLoading } = useRole();
 
   if (isLoading) {
-    return <p>Loading.......</p>;
+    return <Loading></Loading>;
   }
   if (role === "admin") {
     return <AdminHomePage></AdminHomePage>;
