@@ -9,15 +9,15 @@ const bloodGroups = ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"];
 
 export default function Banner() {
   return (
-    <section className="relative min-h-[85vh] flex items-center overflow-hidden bg-slate-50 pt-24 lg:pt-16">
+    <section className="relative min-h-[85vh] flex items-center overflow-hidden pt-24 lg:pt-16">
       {/* Sophisticated Light Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Soft radial glows */}
-        <div className="absolute top-[-10%] right-[-5%] w-[40%] h-[40%] bg-red-100/50 rounded-full blur-[100px]" />
-        <div className="absolute bottom-[5%] left-[-5%] w-[30%] h-[30%] bg-blue-50/60 rounded-full blur-[80px]" />
+        <div className="absolute top-[-10%] right-[-5%] w-[40%] h-[40%] bg-red-100/50 rounded-full" />
+        <div className="absolute bottom-[5%] left-[-5%] w-[30%] h-[30%] bg-blue-50/60 rounded-full" />
         {/* Subtle geometric grid */}
         <div
-          className="absolute inset-0 opacity-[0.4] [mask-image:linear-gradient(to_bottom,white,transparent)]"
+          className="absolute inset-0 opacity-[0.4] mask-[linear-gradient(to_bottom,white,transparent)]"
           style={{
             backgroundImage: "radial-gradient(#e2e8f0 1px, transparent 1px)",
             backgroundSize: "32px 32px",
@@ -48,7 +48,7 @@ export default function Banner() {
               </span>
             </motion.div>
 
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-slate-900 leading-[1.1] mb-6">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-slate-600 leading-[1.1] mb-6">
               Be the Reason <br />
               <span className="text-red-600">A Heart Keeps</span> <br />
               Beating.
@@ -113,14 +113,14 @@ export default function Banner() {
           >
             {/* Visual Frame */}
             <div className="relative p-3 bg-white rounded-[2.5rem] shadow-2xl shadow-slate-200 border border-slate-100">
-              <div className="overflow-hidden rounded-[2rem] relative">
+              <div className="overflow-hidden rounded relative">
                 <img
                   src="https://wockhardthospitals.com/wp-content/uploads/2020/01/shutterstock_264395594-1-768x768-1.webp"
                   alt="Pulse Donation"
                   className="w-full max-w-lg h-[450px] md:h-[550px] object-cover"
                 />
                 {/* Overlay gradient for depth */}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-slate-900/20 to-transparent" />
               </div>
 
               {/* Floating Verified Badge */}

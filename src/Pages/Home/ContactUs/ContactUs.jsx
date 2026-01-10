@@ -14,7 +14,7 @@ import {
 
 export default function ContactUsClean() {
   return (
-    <section className="relative bg-slate-50 py-20 sm:py-28 px-6 lg:px-20 overflow-hidden">
+    <section className="relative py-20 sm:py-28 px-6 lg:px-20 overflow-hidden">
       {/* Background Decorative Elements */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
         <div className="absolute top-1/4 -left-20 w-96 h-96 bg-red-200/30 rounded-full blur-[100px]" />

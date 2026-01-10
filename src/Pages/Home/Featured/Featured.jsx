@@ -56,10 +56,10 @@ const features = [
 
 export default function FeaturedSection() {
   return (
-    <section className="relative bg-slate-50 py-16 sm:py-24 px-6 sm:px-10 overflow-hidden">
+    <section className="relative py-16 sm:py-24 px-6 sm:px-10 overflow-hidden">
       {/* Heartbeat line animation */}
       <motion.div
-        className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-red-400 via-red-600 to-pink-500"
+        className="absolute top-0 left-0 w-full h-1.5 bg-linear-to-r from-red-400 via-red-600 to-pink-500"
         animate={{ opacity: [0.5, 1, 0.5], scaleX: [1, 1.02, 1] }}
         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
       />
@@ -118,7 +118,7 @@ export default function FeaturedSection() {
                 alt={feature.title}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+              <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
                 <span className="text-white text-xs font-medium uppercase tracking-widest">
                   Learn More
                 </span>

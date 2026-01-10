@@ -4,6 +4,8 @@ import useAuth from "../../../Hooks/useAuth";
 import { HiMenuAlt3 } from "react-icons/hi";
 import Logo from "../Logo/Logo";
 import Swal from "sweetalert2";
+import { TbAlertOctagon } from "react-icons/tb";
+
 import {
   IoLogIn,
   IoLogOut,
@@ -14,10 +16,26 @@ import {
   IoGrid,
   IoChevronDown,
 } from "react-icons/io5";
+import { MdLightMode } from "react-icons/md";
+import { MdOutlineDarkMode } from "react-icons/md";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
   const [scrolled, setScrolled] = useState(false);
+
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+  const [dark, setDark] = useState(theme === "dark");
+
+  useEffect(() => {
+    const html = document.querySelector("html");
+    html.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const handleTheme = (checked) => {
+    setTheme(checked ? "dark" : "light");
+    setDark(checked);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -69,6 +87,11 @@ const Navbar = () => {
           <IoWater size={18} /> Requests
         </NavLink>
       </li>
+      <li>
+        <NavLink to="/about-us" className={navLinkClasses}>
+          <TbAlertOctagon size={18} /> About Us
+        </NavLink>
+      </li>
       {user && (
         <li>
           <NavLink to="/funding" className={navLinkClasses}>
@@ -80,13 +103,13 @@ const Navbar = () => {
   );
 
   return (
-    <div className="fixed top-0 w-full z-[100] px-4 sm:px-8 py-4 pointer-events-none">
+    <div className="fixed top-0 w-full z-100 px-4 sm:px-8 py-2 pointer-events-none">
       <header
-        className={`max-w-7xl mx-auto pointer-events-auto transition-all duration-500 rounded-[2rem] border 
+        className={`max-w-7xl mx-auto pointer-events-auto transition-all duration-500 py-1 rounded-full border 
           ${
             scrolled
-              ? "bg-slate-900/95 backdrop-blur-xl border-slate-700/50 shadow-2xl py-2"
-              : "bg-slate-900/80 backdrop-blur-md border-white/10 py-2"
+              ? "bg-slate-900/95 backdrop-blur-xl border-slate-700/50 shadow-2xl"
+              : "bg-slate-900/80 backdrop-blur-md border-white/10"
           }`}
       >
         <div className="navbar px-6 lg:px-8">
@@ -151,6 +174,17 @@ const Navbar = () => {
                       <IoGrid size={18} /> Dashboard
                     </NavLink>
                   </li>
+                  <li className="flex flex-row items-center justify-between px-4 py-2">
+                    <span className="text-sm font-medium text-white">
+                      Mode: {dark ? "Dark" : "Light"}
+                    </span>
+                    <input
+                      onChange={(e) => handleTheme(e.target.checked)}
+                      type="checkbox"
+                      checked={dark}
+                      className="toggle toggle-sm bg-base-100"
+                    />
+                  </li>
                   <li>
                     <button
                       onClick={handleLogout}
@@ -162,13 +196,31 @@ const Navbar = () => {
                 </ul>
               </div>
             ) : (
-              <Link
-                to="/auth/login"
-                className="group flex items-center gap-2 px-7 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-full shadow-lg shadow-red-600/30 transition-all duration-300 active:scale-95"
-              >
-                <IoLogIn size={20} />
-                <span className="text-sm">Login</span>
-              </Link>
+              <div className="items-center gap-2 flex">
+                <div className="hidden lg:flex items-center">
+                  <button className="relative top-0 right-1">
+                    {dark ? (
+                      <MdLightMode size={20} />
+                    ) : (
+                      <MdOutlineDarkMode size={20} />
+                    )}
+                  </button>
+                  <input
+                    onChange={(e) => handleTheme(e.target.checked)}
+                    type="checkbox"
+                    checked={dark}
+                    className="toggle toggle-sm bg-base-100"
+                  />
+                </div>
+
+                <Link
+                  to="/auth/login"
+                  className="group flex items-center gap-2 px-7 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-full shadow-lg shadow-red-600/30 transition-all duration-300 active:scale-95"
+                >
+                  <IoLogIn size={20} />
+                  <span className="text-sm">Login</span>
+                </Link>
+              </div>
             )}
           </div>
         </div>

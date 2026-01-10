@@ -1,17 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap');
+
+
 @import "tailwindcss";
 @plugin "daisyui" {
-    themes: light --default;
+    themes: light --default, dark --prefersdark;;
 }
 
 @plugin "daisyui/theme" {
   name: "light";
   default: true;
+   prefersdark: true; 
   --color-primary: 	#c80004;
   --color-secondary: #6f0202;
   --color-accent: #606060;
   --color-base-200: #FAFDF0;
 }
  
+span, p, li {
+      font-family: "Lato", sans-serif;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+     font-family: "Merriweather", serif;
+}
+
+
 
 /* li a.active {
     background-color: #c80004;

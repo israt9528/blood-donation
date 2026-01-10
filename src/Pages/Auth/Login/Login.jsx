@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../../Hooks/useAuth";
-import { motion, AnimatePresence } from "framer-motion"; // Added AnimatePresence
+import { motion, AnimatePresence } from "framer-motion";
 import {
   IoMail,
   IoLockClosed,
   IoArrowBack,
   IoChevronForward,
-  IoWarningOutline, // Added Warning Icon
+  IoWarningOutline,
+  IoFlash, // Added for Demo Icon
 } from "react-icons/io5";
 import Logo from "../../../Components/Shared/Logo/Logo";
 
@@ -16,21 +17,29 @@ const Login = () => {
   const {
     register,
     handleSubmit,
+    setValue, // Added setValue to manually fill form
     formState: { errors },
   } = useForm();
+
   const { loginUser } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [error, setError] = useState("");
 
+  // Function to fill demo data
+  const handleDemoLogin = () => {
+    setValue("email", "demo@pulse.com");
+    setValue("password", "demo@123");
+    setError(""); // Clear any existing errors
+  };
+
   const handleLogin = (data) => {
-    setError(""); // Clear previous errors
+    setError("");
     loginUser(data.email, data.password)
       .then((res) => {
         navigate(location?.state || "/");
       })
       .catch((error) => {
-        // Cleaning up Firebase error messages (e.g., "auth/invalid-credential")
         const friendlyError = error.message.includes("invalid-credential")
           ? "Invalid email or password. Please try again."
           : error.message;
@@ -40,7 +49,6 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 sm:p-8">
-      {/* Floating Back Button */}
       <Link
         to="/"
         className="fixed top-6 left-6 z-50 flex items-center gap-2 text-slate-500 hover:text-red-600 transition-colors font-bold text-sm"
@@ -57,7 +65,7 @@ const Login = () => {
               className="w-full h-full object-cover"
               alt="Healthcare login"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-t from-slate-950 via-slate-900/40 to-transparent" />
           </div>
 
           <div className="relative h-full flex flex-col justify-between z-10">
@@ -73,7 +81,7 @@ const Login = () => {
               </p>
             </div>
             <div className="flex items-center gap-3 text-white/40 text-xs font-bold uppercase tracking-widest">
-              <span className="w-8 h-[1px] bg-white/20"></span>
+              <span className="w-8 h-px bg-white/20"></span>
               Pulse Safety Protocols Active
             </div>
           </div>
@@ -92,7 +100,6 @@ const Login = () => {
           </div>
 
           <form onSubmit={handleSubmit(handleLogin)} className="space-y-5">
-            {/* --- ERROR MESSAGE SECTION --- */}
             <AnimatePresence>
               {error && (
                 <motion.div
@@ -169,8 +176,21 @@ const Login = () => {
               )}
             </div>
 
+            {/* --- DEMO CREDENTIALS BUTTON --- */}
+            <button
+              type="button" // Important: set type to button to prevent form submission
+              onClick={handleDemoLogin}
+              className="w-full py-3 bg-red-50 text-red-600 hover:bg-red-100 border-2 border-dashed border-red-200 font-bold rounded-2xl transition-all duration-300 flex items-center justify-center gap-2 text-sm"
+            >
+              <IoFlash className="animate-pulse" />
+              Use Demo Credentials
+            </button>
+
             {/* Submit Button */}
-            <button className="w-full py-4 bg-slate-900 hover:bg-red-600 text-white font-black rounded-2xl shadow-xl shadow-slate-900/10 transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-2 group mt-2">
+            <button
+              type="submit"
+              className="w-full py-4 bg-slate-900 hover:bg-red-600 text-white font-black rounded-2xl shadow-xl shadow-slate-900/10 transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-2 group mt-2"
+            >
               Sign In
               <IoChevronForward className="group-hover:translate-x-1 transition-transform" />
             </button>
