@@ -7,10 +7,10 @@ import {
   MapPin,
   Send,
   Facebook,
-  Twitter,
   Instagram,
   Linkedin,
 } from "lucide-react";
+import { FaXTwitter } from "react-icons/fa6";
 
 export default function ContactUsClean() {
   return (
@@ -59,7 +59,7 @@ export default function ContactUsClean() {
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-4xl sm:text-5xl font-black text-slate-900 mb-6"
+            className="text-3xl sm:text-4xl font-black text-slate-900 mb-6"
           >
             Let's Start a <span className="text-red-600">Conversation</span>
           </motion.h2>
@@ -125,20 +125,22 @@ export default function ContactUsClean() {
                 Follow our impact:
               </h4>
               <div className="flex gap-4">
-                {[Facebook, Twitter, Instagram, Linkedin].map((Icon, idx) => (
-                  <motion.a
-                    key={idx}
-                    href="#"
-                    whileHover={{
-                      y: -5,
-                      backgroundColor: "#ef4444",
-                      color: "#fff",
-                    }}
-                    className="w-12 h-12 flex items-center justify-center bg-white shadow-sm border border-slate-100 rounded-xl text-slate-600 transition-colors"
-                  >
-                    <Icon size={20} />
-                  </motion.a>
-                ))}
+                {[Facebook, FaXTwitter, Instagram, Linkedin].map(
+                  (Icon, idx) => (
+                    <motion.a
+                      key={idx}
+                      href="#"
+                      whileHover={{
+                        y: -5,
+                        backgroundColor: "#ef4444",
+                        color: "#fff",
+                      }}
+                      className="w-12 h-12 flex items-center justify-center bg-white shadow-sm border border-slate-100 rounded-xl text-slate-600 transition-colors"
+                    >
+                      <Icon size={20} />
+                    </motion.a>
+                  ),
+                )}
               </div>
             </div>
           </div>

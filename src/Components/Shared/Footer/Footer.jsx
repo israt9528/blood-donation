@@ -7,12 +7,13 @@ import {
   Phone,
   MapPin,
   Facebook,
-  Twitter,
   Instagram,
   Youtube,
   Send,
   Activity,
 } from "lucide-react";
+import { FaXTwitter } from "react-icons/fa6";
+
 import Logo from "../Logo/Logo";
 
 export default function Footer() {
@@ -104,7 +105,7 @@ export default function Footer() {
               that blood donation is accessible and fast for everyone.
             </p>
             <div className="flex gap-4">
-              {[Facebook, Twitter, Instagram, Youtube].map((Icon, i) => (
+              {[Facebook, FaXTwitter, Instagram, Youtube].map((Icon, i) => (
                 <a
                   key={i}
                   href="#"

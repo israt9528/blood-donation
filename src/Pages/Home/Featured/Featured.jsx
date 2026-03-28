@@ -90,7 +90,7 @@ export default function FeaturedSection() {
         <motion.h2
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          className="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight"
+          className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight"
         >
           Why Choose Our Platform
         </motion.h2>
