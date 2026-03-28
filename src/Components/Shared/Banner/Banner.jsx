@@ -117,7 +117,7 @@ export default function Banner() {
                 <img
                   src="https://wockhardthospitals.com/wp-content/uploads/2020/01/shutterstock_264395594-1-768x768-1.webp"
                   alt="Pulse Donation"
-                  className="w-full max-w-lg h-[450px] md:h-[550px] object-cover"
+                  className="w-full max-w-lg h-[450px] md:h-[550px] rounded-[2.5rem] object-cover"
                 />
                 {/* Overlay gradient for depth */}
                 <div className="absolute inset-0 bg-linear-to-t from-slate-900/20 to-transparent" />

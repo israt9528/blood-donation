@@ -5,17 +5,28 @@
 
 @import "tailwindcss";
 @plugin "daisyui" {
-    themes: light --default, dark --prefersdark;;
+    themes: light --default, dark --prefersdark;
 }
 
 @plugin "daisyui/theme" {
   name: "light";
   default: true;
-   prefersdark: true; 
   --color-primary: 	#c80004;
   --color-secondary: #6f0202;
   --color-accent: #606060;
   --color-base-200: #FAFDF0;
+}
+
+@plugin "daisyui/theme" {
+  name: "dark";
+  prefersdark: true;
+  --color-primary: #ef4444;
+  --color-secondary: #991b1b;
+  --color-accent: #94a3b8;
+  --color-base-100: #0f172a;
+  --color-base-200: #111827;
+  --color-base-300: #1e293b;
+  --color-base-content: #e2e8f0;
 }
  
 span, p, li {
@@ -25,6 +36,232 @@ span, p, li {
 
 h1, h2, h3, h4, h5, h6 {
      font-family: "Merriweather", serif;
+}
+
+html {
+  background-color: var(--color-base-100);
+}
+
+body,
+#root {
+  min-height: 100vh;
+  background-color: inherit;
+  color: var(--color-base-content);
+}
+
+@layer base {
+  html[data-theme="dark"] {
+    color-scheme: dark;
+    --pulse-dark-page: #020617;
+    --pulse-dark-surface: #0f172a;
+    --pulse-dark-elevated: #111827;
+    --pulse-dark-panel: #1e293b;
+    --pulse-dark-panel-strong: #334155;
+    --pulse-dark-border: #334155;
+    --pulse-dark-border-soft: #475569;
+    --pulse-dark-text-strong: #f8fafc;
+    --pulse-dark-text: #e2e8f0;
+    --pulse-dark-text-soft: #cbd5e1;
+    --pulse-dark-text-muted: #94a3b8;
+  }
+
+  html[data-theme="dark"] body,
+  html[data-theme="dark"] #root {
+    background-color: var(--pulse-dark-page);
+    color: var(--pulse-dark-text);
+  }
+
+  html[data-theme="dark"] input,
+  html[data-theme="dark"] select,
+  html[data-theme="dark"] textarea,
+  html[data-theme="dark"] option {
+    color: var(--pulse-dark-text);
+    caret-color: var(--pulse-dark-text);
+  }
+
+  html[data-theme="dark"] input::placeholder,
+  html[data-theme="dark"] textarea::placeholder {
+    color: var(--pulse-dark-text-muted);
+  }
+}
+
+/* Dark mode utility overrides for components that hard-code light palettes. */
+@layer components {
+  html[data-theme="dark"] [class~="bg-white"],
+  html[data-theme="dark"] [class~="bg-base-100"],
+  html[data-theme="dark"] [class~="bg-slate-50"],
+  html[data-theme="dark"] [class~="bg-slate-50/30"],
+  html[data-theme="dark"] [class~="bg-slate-50/50"],
+  html[data-theme="dark"] [class~="bg-slate-50/80"],
+  html[data-theme="dark"] [class~="bg-slate-100"],
+  html[data-theme="dark"] [class~="bg-base-200"],
+  html[data-theme="dark"] [class~="bg-base-200/50"] {
+    background-color: var(--pulse-dark-elevated) !important;
+  }
+
+  html[data-theme="dark"] [class~="bg-slate-200"],
+  html[data-theme="dark"] [class~="bg-slate-200/50"] {
+    background-color: var(--pulse-dark-panel) !important;
+  }
+
+  html[data-theme="dark"] [class~="bg-slate-300"],
+  html[data-theme="dark"] [class~="bg-slate-400"] {
+    background-color: var(--pulse-dark-panel-strong) !important;
+  }
+
+  html[data-theme="dark"] [class~="bg-red-50"],
+  html[data-theme="dark"] [class~="bg-red-50/30"] {
+    background-color: rgb(239 68 68 / 0.12) !important;
+  }
+
+  html[data-theme="dark"] [class~="bg-red-100"],
+  html[data-theme="dark"] [class~="bg-red-100/50"],
+  html[data-theme="dark"] [class~="bg-red-200/30"],
+  html[data-theme="dark"] [class~="bg-red-400/10"],
+  html[data-theme="dark"] [class~="bg-red-600/10"] {
+    background-color: rgb(239 68 68 / 0.18) !important;
+  }
+
+  html[data-theme="dark"] [class~="bg-blue-50"],
+  html[data-theme="dark"] [class~="bg-blue-50/60"],
+  html[data-theme="dark"] [class~="bg-blue-600/10"] {
+    background-color: rgb(59 130 246 / 0.16) !important;
+  }
+
+  html[data-theme="dark"] [class~="bg-emerald-50"],
+  html[data-theme="dark"] [class~="bg-emerald-100"],
+  html[data-theme="dark"] [class~="bg-success/10"] {
+    background-color: rgb(16 185 129 / 0.16) !important;
+  }
+
+  html[data-theme="dark"] [class~="bg-green-50"],
+  html[data-theme="dark"] [class~="bg-green-100"] {
+    background-color: rgb(34 197 94 / 0.16) !important;
+  }
+
+  html[data-theme="dark"] [class~="bg-indigo-50"],
+  html[data-theme="dark"] [class~="bg-indigo-600/10"] {
+    background-color: rgb(99 102 241 / 0.16) !important;
+  }
+
+  html[data-theme="dark"] [class~="bg-rose-50"],
+  html[data-theme="dark"] [class~="bg-rose-200/30"] {
+    background-color: rgb(244 63 94 / 0.16) !important;
+  }
+
+  html[data-theme="dark"] [class~="bg-amber-50"],
+  html[data-theme="dark"] [class~="bg-error/10"] {
+    background-color: rgb(245 158 11 / 0.16) !important;
+  }
+
+  html[data-theme="dark"] [class~="text-slate-900"],
+  html[data-theme="dark"] [class~="text-slate-800"] {
+    color: var(--pulse-dark-text-strong) !important;
+  }
+
+  html[data-theme="dark"] [class~="text-slate-700"],
+  html[data-theme="dark"] [class~="text-gray-700"] {
+    color: var(--pulse-dark-text) !important;
+  }
+
+  html[data-theme="dark"] [class~="text-slate-600"],
+  html[data-theme="dark"] [class~="text-slate-500"] {
+    color: var(--pulse-dark-text-soft) !important;
+  }
+
+  html[data-theme="dark"] [class~="text-slate-400"] {
+    color: var(--pulse-dark-text-muted) !important;
+  }
+
+  html[data-theme="dark"] [class~="text-red-500"],
+  html[data-theme="dark"] [class~="text-red-600"],
+  html[data-theme="dark"] [class~="text-red-700"],
+  html[data-theme="dark"] [class~="text-red-800"] {
+    color: #f87171 !important;
+  }
+
+  html[data-theme="dark"] [class~="text-blue-500"],
+  html[data-theme="dark"] [class~="text-blue-600"] {
+    color: #60a5fa !important;
+  }
+
+  html[data-theme="dark"] [class~="text-emerald-500"],
+  html[data-theme="dark"] [class~="text-emerald-600"],
+  html[data-theme="dark"] [class~="text-emerald-700"],
+  html[data-theme="dark"] [class~="text-green-500"],
+  html[data-theme="dark"] [class~="text-green-600"] {
+    color: #34d399 !important;
+  }
+
+  html[data-theme="dark"] [class~="text-indigo-600"] {
+    color: #818cf8 !important;
+  }
+
+  html[data-theme="dark"] [class~="text-rose-600"] {
+    color: #fb7185 !important;
+  }
+
+  html[data-theme="dark"] [class~="border-white"],
+  html[data-theme="dark"] [class~="border-slate-50"],
+  html[data-theme="dark"] [class~="border-slate-100"],
+  html[data-theme="dark"] [class~="border-slate-200"],
+  html[data-theme="dark"] [class~="border-slate-200/60"],
+  html[data-theme="dark"] [class~="border-slate-300"],
+  html[data-theme="dark"] [class~="border-base-200"] {
+    border-color: var(--pulse-dark-border) !important;
+  }
+
+  html[data-theme="dark"] [class~="divide-slate-50"] > :not([hidden]) ~ :not([hidden]),
+  html[data-theme="dark"] [class~="divide-slate-100"] > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--pulse-dark-border) !important;
+  }
+
+  html[data-theme="dark"] [class~="ring-white"],
+  html[data-theme="dark"] [class~="ring-slate-50"] {
+    --tw-ring-color: var(--pulse-dark-border) !important;
+  }
+
+  html[data-theme="dark"] [class~="hover:bg-slate-50"]:hover,
+  html[data-theme="dark"] [class~="hover:bg-slate-50/50"]:hover,
+  html[data-theme="dark"] [class~="hover:bg-slate-50/80"]:hover,
+  html[data-theme="dark"] [class~="hover:bg-slate-100"]:hover,
+  html[data-theme="dark"] [class~="hover:bg-slate-200"]:hover,
+  html[data-theme="dark"] [class~="hover:bg-base-200/50"]:hover {
+    background-color: var(--pulse-dark-panel) !important;
+  }
+
+  html[data-theme="dark"] [class~="hover:bg-red-50"]:hover,
+  html[data-theme="dark"] [class~="hover:bg-red-100"]:hover,
+  html[data-theme="dark"] [class~="hover:bg-red-50/30"]:hover,
+  html[data-theme="dark"] [class~="hover:bg-red-400/10"]:hover {
+    background-color: rgb(239 68 68 / 0.22) !important;
+  }
+
+  html[data-theme="dark"] [class~="hover:bg-emerald-50"]:hover {
+    background-color: rgb(16 185 129 / 0.22) !important;
+  }
+
+  html[data-theme="dark"] [class~="hover:bg-rose-50"]:hover {
+    background-color: rgb(244 63 94 / 0.22) !important;
+  }
+
+  html[data-theme="dark"] [class~="hover:bg-amber-50"]:hover {
+    background-color: rgb(245 158 11 / 0.22) !important;
+  }
+
+  html[data-theme="dark"] [class~="focus:bg-white"]:focus,
+  html[data-theme="dark"] [class~="focus-within:bg-white"]:focus-within {
+    background-color: var(--pulse-dark-surface) !important;
+  }
+
+  html[data-theme="dark"] [class~="bg-white"][class*="blur"] {
+    background-color: rgb(255 255 255 / 0.12) !important;
+  }
+
+  html[data-theme="dark"] span[class~="bg-white"],
+  html[data-theme="dark"] [class~="bg-white"][class*="animate-ping"] {
+    background-color: rgb(255 255 255 / 0.9) !important;
+  }
 }
 
 
